@@ -25,7 +25,7 @@ erDiagram
         integer user_id FK
     }
     PROJECTS {
-        string uuid "UNIQUE"
+        string uuid PK "UNIQUE"
         string name
         timestamp created_at
         timestamp updated_at
