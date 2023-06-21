@@ -6,7 +6,7 @@
 erDiagram
     USERS ||--o{ PROJECTS : own
     USERS ||--o{ SSH_KEYS : own
-    DEPLOYMENTS ||--o{ PROJECTS : contain
+    PROJECTS ||--o{ DEPLOYMENTS : have
     USERS {
         integer id PK
         string username "UNIQUE"
