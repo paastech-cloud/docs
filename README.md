@@ -12,7 +12,7 @@ erDiagram
         string username "UNIQUE"
         string email "UNIQUE"
         string password
-        bool is_verified
+        bool is_admin
         string email_nonce "NULLABLE"
         timestamp created_at
         timestamp updated_at
