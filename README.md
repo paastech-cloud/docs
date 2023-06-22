@@ -25,14 +25,16 @@ erDiagram
         integer user_id FK
     }
     PROJECTS {
-        string uuid PK "UNIQUE"
+        integer id PK
+        string uuid "UNIQUE"
         string name
         timestamp created_at
         timestamp updated_at
         integer user_id FK
     }
     DEPLOYMENTS {
-        string uuid PK "UNIQUE"
+        integer id PK
+        string uuid "UNIQUE"
         string name
         bson config "Stores config such as env vars"
         timestamp created_at
