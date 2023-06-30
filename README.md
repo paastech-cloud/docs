@@ -7,38 +7,38 @@ erDiagram
     USERS ||--o{ PROJECTS : own
     USERS ||--o{ SSH_KEYS : own
     PROJECTS ||--o{ DEPLOYMENTS : have
+
     USERS {
         integer id PK
         string username "UNIQUE"
         string email "UNIQUE"
         string password
-        bool is_admin
+        bool is_admin "DEFAULT FALSE"
         string email_nonce "NULLABLE"
+        string password_nonce "NULLABLE"
         timestamp created_at
-        timestamp updated_at
+        timestamp updated_at "NULLABLE"
     }
     SSH_KEYS {
         integer id PK
         string value
         timestamp created_at
-        timestamp updated_at
+        timestamp updated_at "NULLABLE"
         integer user_id FK
     }
     PROJECTS {
-        integer id PK
-        uuid uuid "UNIQUE"
+        uuid uuid PK
         string name
         timestamp created_at
-        timestamp updated_at
+        timestamp updated_at "NULLABLE"
         integer user_id FK
     }
     DEPLOYMENTS {
-        integer id PK
-        uuid uuid "UNIQUE"
+        uuid uuid PK
         string name
-        bson config "Stores config such as env vars"
+        json config "Stores config such as env vars"
         timestamp created_at
-        timestamp updated_at
-        integer project_uuid FK
+        timestamp updated_at "NULLABLE"
+        uuid project_uuid FK "References 'uuid' in table projects"
     }
 ```
