@@ -46,6 +46,10 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which just released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
+#### Database
+
+***TODO: [CLIENT] fill for the unified database schema***
+
 #### Git controller
 
 ***TODO: [GIT] fill for the git controller and architecture***
@@ -53,10 +57,6 @@ The API is currently running on NestJS-express v10.0.3, which just released. Two
 #### Client applications deployment
 
 ***TODO: [INFRA] fill for the architecture used to deploy clients' applications***
-
-#### Database
-
-***TODO: [CLIENT] fill for the unified database schema***
 
 #### CI/CD
 
