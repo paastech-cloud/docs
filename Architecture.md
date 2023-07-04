@@ -24,7 +24,15 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 #### Client API
 
-***TODO: [CLIENT] fill for the external API***
+The Client API, meaning the external API that Clients connect to and interact with, is made using NestJS. Being a cutting-edge framework gaining more and more attention, NestJS has a lot of support for a lot of different uses. The API is currently running on NestJS-express v10.0.3, which just released.
+
+Benchmarks open-sourced in v7.6.13 ([available here](https://github.com/nestjs/nest/blob/e7fa96022e8b8580413490101683aabe387ca9b9/benchmarks/all_output.txt)) gave the following comparison:
+- NestJS-express is nearly on par with Express for the average response time (`65.44 ms` versus `61.88 ms`)
+- NestJS-express is twice as fast in maximum response time (only `325 ms` against Express' `747 ms`)
+- NestJS-express can handle nearly twice as many requests concurrently, for the minimum amount doable (`14183 req/s` versus `8407 req/s`)
+- NestJS-express is on par with Express for the number of requests handled concurrently, for the average amount doable (`15640` versus `16454.41`)
+
+Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
 #### Git controller
 
