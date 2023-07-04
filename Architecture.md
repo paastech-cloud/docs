@@ -32,7 +32,10 @@
 
 #### Database
 
-***TODO: [CLIENT] fill for the unified database schema***
+The chosen database for this application is [PostgreSQL](https://www.postgresql.org/). As market leader, PostgreSQL stands out for 
+its performance and widespread use throughout the world.
+
+The API connects to the database using an ORM called [Prisma](https://www.prisma.io/).
 
 #### CI/CD
 
