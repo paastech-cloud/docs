@@ -16,7 +16,11 @@
 
 #### CLI (Command-Line Interface)
 
-***TODO: [CLIENT] fill for the cli***
+The CLI tool, which is the principal way for a user to create and deploy projects, has been developed in [Go](https://go.dev/). It was chosen for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language, which allows for a single binary to be distributed, and it is used in many other CLI tools, such as Docker, Kubernetes, Terraform, etc.
+
+In order to make this tool in Go, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with subcommands, flags, etc. It is notably used by the Kubernetes CLI tool, `kubectl` or even by companies like Fly.io and Scaleway for their own CLI tools.
+
+Apart from Cobra, other libraries are used in this tool, such as go-git, which allows for easy Git repository management. This is required for the tool to be able to initialize projects by adding a remote Git repository, and to deploy projects by pushing the code to our git server.
 
 #### Client API
 
