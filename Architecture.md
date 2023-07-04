@@ -55,7 +55,49 @@
 
 ### Database architecture
 
-***TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README***
+As the database is unified and serves as a focal point of the application, everything is contained in the same logical database.
+The architecture is as follows:
+
+```mermaid
+erDiagram
+    USERS ||--o{ PROJECTS : manage
+    USERS ||--o{ SSH_KEYS : possess
+    PROJECTS ||--o{ DEPLOYMENTS : contain
+
+    USERS {
+        uuid id PK
+        varchar(40) username UK
+        varchar(100) email UK
+        varchar(255) password
+        bool is_admin "Default false"
+        uuid email_nonce UK "Nullable, default uuid()"
+        uuid password_nonce UK "Nullable"
+        timestamp created_at
+        timestamp updated_at "Nullable"
+    }
+    SSH_KEYS {
+        integer id PK
+        text value "public SSH key content"
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+    PROJECTS {
+        uuid id PK
+        varchar(40) name
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+    DEPLOYMENTS {
+        uuid id PK
+        varchar(40) name
+        json config
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid project_id FK
+    }
+```
 
 ### Detailed specification
 
