@@ -47,7 +47,7 @@ The API connects to the database using an ORM called [Prisma](https://www.prisma
 ### Definitions
 
 - the Service refers to PaaSTech as a whole;
-- a Client is a user account created by an end user against the Service;
+- a Client (also referred to as a User) is a user account created by an end user against the Service;
 - a Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
 - an Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
 
