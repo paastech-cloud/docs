@@ -24,23 +24,27 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 #### Client API
 
-The Client API, meaning the external API that Clients connect to and interact with, is made using [NestJS](https://nestjs.com/). Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands out from the competition by proposing two things: first of all, a [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today; then, an [extensive documentation with code examples](https://docs.nestjs.com/) ranging from basics to difficult recipes to setup. The API is currently running on NestJS-express v10.0.3, which just released.
+The Client API, meaning the external API that Clients connect to and interact with, is made using [NestJS](https://nestjs.com/). 
+Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands 
+out from the competition by proposing two things: 
+first of all, a [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
+then, an [extensive documentation with code examples](https://docs.nestjs.com/) ranging from basics to difficult recipes to setup.
 
-Benchmarks open-sourced in v7.6.13 ([available here](https://github.com/nestjs/nest/blob/e7fa96022e8b8580413490101683aabe387ca9b9/benchmarks/all_output.txt)) gave the following comparison:
-- NestJS-express is nearly on par with Express for the average response time (`65.44 ms` versus `61.88 ms`)
-- NestJS-express is twice as fast in maximum response time (only `325 ms` against Express' `747 ms`)
-- NestJS-express can handle nearly twice as many requests concurrently, for the minimum amount doable (`14183 req/s` versus `8407 req/s`)
-- NestJS-express is on par with Express for the number of requests handled concurrently, for the average amount doable (`15640` versus `16454.41`)
-
-Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
-
-As stated above, NestJS' modules provide a substantial support for the integration of well-known modules into the application. The main TPMs used for the API are:
+NestJS' support modules provide a substantial support for the integration of well-known modules into the application. The main TPMs used for the API are:
 
 - `class-validator`: validation of DTOs (Data Transfer Objects) and their properties before they are handed out to NestJS controllers
 - `@nestjs/config`: ease of access to a config service, centralising both environment variables and `.env` files
 - `passport` and `passport-jwt` (along with `@nestjs/passport` and `@nestjs/jwt`): layer of abstraction to handle different authentication methods, such as JWTs, OAuth2 or OIDC. Here, only the JWTs are used.
 - `uuid`: generation of UUIDs v4, following [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122)
 - `nodemailer` with `handlebars`: sending of outbound emails through SMTP, with templating of HTML emails sent
+
+Moreover, all of the support that NestJS provides doesn't make it slower. Benchmarks open-sourced in v7.6.13 ([available here](https://github.com/nestjs/nest/blob/e7fa96022e8b8580413490101683aabe387ca9b9/benchmarks/all_output.txt)) gave the following comparison:
+- NestJS-express is nearly on par with Express for the average response time (`65.44 ms` versus `61.88 ms`)
+- NestJS-express is twice as fast in maximum response time (only `325 ms` against Express' `747 ms`)
+- NestJS-express can handle nearly twice as many requests concurrently, for the minimum amount doable (`14183 req/s` versus `8407 req/s`)
+- NestJS-express is on par with Express for the number of requests handled concurrently, for the average amount doable (`15640` versus `16454.41`)
+
+The API is currently running on NestJS-express v10.0.3, which just released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
 #### Git controller
 
