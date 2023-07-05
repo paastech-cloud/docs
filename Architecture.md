@@ -89,7 +89,32 @@ The API is currently running on NestJS-express v10.0.3, which just released. Two
 
 #### Client sign-up and login process
 
-***TODO: [CLIENT] mermaid diagram and description of the login process flow, for both the CLI and the web frontend***
+##### Client states
+
+When signing up, the client should provide an email, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after some time of an account being active without a verified email, although this is not implemented for now.
+
+```mermaid
+stateDiagram-v2
+    c : Created
+    v : Verified
+    d : Deleted
+    r : Reset mode
+
+    [*] --> c
+    d --> [*]
+
+    c --> v: email verification
+
+    c --> d: after some time
+
+    v --> r: password reset request
+    r --> v: password change
+
+    v --> d: account deletion request
+
+```
+
+##### Flow processes
 
 #### Projects storage
 
