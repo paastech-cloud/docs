@@ -8,14 +8,16 @@
 
 ### Technologies
 
-In the deployment manager, Pomegranate, the following technologies are used:
+#### Application manager
+
+In the application manager, Pomegranate, the following technologies were used:
 
 - The Rust programming language, for developing the service. We used this programming language because
   we wanted a performant language that could be trusted with this job, and with support for the other
   technologies we use. Today, we know that this was not the best choice as it might slow us down
   during development, and is not a first-party choice for libraries such as Docker and Kubernetes that
   we will use later on.
-- Docker, for running the containers that contain the client applications. We used this because we already
+- Docker, for running the containers that contain the client applications. We chose this because we already
   know how to use it, and it is straightforward to communicate with the Docker server to manage containers.
   It also handles for us networking and storage, so we don't have to worry about those issues.
 - gRPC for allowing other services to communicate with us. This is the go-to framework for internal
