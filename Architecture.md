@@ -121,8 +121,12 @@ Bollard is a quite powerful crate, and allows us to do everything we need with D
 Pomegranate is completely stateless, and the API is the only external way to interact with it. 
 Once a container is started, Pomegranate does not keep track of it, and it is the responsibility of the execution engine to manage it.
 
-It does that by exposing the port 80 of any application in an internal network
-It then passes it to [Traefik](https://doc.traefik.io/traefik/), which request a certificate and load balance it for a URL created from the project name and the application ID.
+To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to answer on 80 and 443 ports.
+Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
+
+TLS Termination is handled by Traefik, by resolving the DNS-O1 challenge with the TLS provider of choice. This allows to have a valid certificate for all subdomains of PaasTech.
+In this case, the provider is Porkbun.
+
 
 
 ## Post-mortem
