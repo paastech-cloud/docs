@@ -77,6 +77,8 @@ client<--http-->api
 
 api["API"]<--grpc-->pomegranate["Pomegranate"]
 
+api<-->front["Web frontend"]
+
 pomegranate<-.docker.sock.->docker(["Docker"])
 
 api<--TCP/IP-->id1[(Database)]
@@ -102,7 +104,24 @@ api<--TCP/IP-->id1[(Database)]
 
 #### Client Applications
 
-***TODO: [INFRA] how are the Client applications provisioned, how they are exposed and how the underlying infrastructure is managed***
+Pomegranate, our application manager, is responsible for starting, stopping and basically interacting with the client applications.
+It is also responsible for managing the networking of the applications.
+
+For this iteration, we used Docker as the execution engine. Through [Bollard](https://crates.io/crates/bollard/), a rust crate, we can communicate with the Docker daemon through its API.
+Bollard is a quite powerful crate, and allows us to do everything we need with Docker, such as:
+- Starting and stopping containers,
+- Creating networks,
+- Creating volumes,
+- Managing images,
+- Fetching logs,
+- Fetching stats
+
+Pomegranate is completely stateless, and the API is the only external way to interact with it. 
+Once a container is started, Pomegranate does not keep track of it, and it is the responsibility of the execution engine to manage it.
+
+It does that by exposing the port 80 of any application in an internal network
+It then passes it to [Traefik](https://doc.traefik.io/traefik/), which request a certificate and load balance it for a URL created from the project name and the application ID.
+
 
 ## Post-mortem
 
