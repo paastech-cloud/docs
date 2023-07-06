@@ -66,6 +66,22 @@ In the deployment manager, Pomegranate, the following technologies are used:
 
 ***TODO: [UNIFIED WORK] mermaid diagram of how components interact with eachother***
 
+```mermaid
+flowchart LR
+
+git<-.git over ssh.->client["CLI"]
+
+git["Git server"]<--grpc-->api
+
+client<--http-->api
+
+api["API"]<--grpc-->pomegranate["Pomegranate"]
+
+pomegranate<-.docker.sock.->docker(["Docker"])
+
+api<--TCP/IP-->id1[(Database)]
+```
+
 ### Database architecture
 
 ***TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README***
