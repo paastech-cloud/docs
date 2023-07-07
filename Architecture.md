@@ -10,20 +10,28 @@
 
 #### Application manager
 
-In the application manager, Pomegranate, the following technologies were used:
+The application manager, Pomegranate is charged with acting on containers' lifecycle.
 
-- The Rust programming language, for developing the service. We used this programming language because
-  we wanted a performant language that could be trusted with this job, and with support for the other
-  technologies we use. Today, we know that this was not the best choice as it might slow us down
-  during development, and is not a first-party choice for libraries such as Docker and Kubernetes that
-  we will use later on.
-- Docker, for running the containers that contain the client applications. We chose this because we already
-  know how to use it, and it is straightforward to communicate with the Docker server to manage containers.
-  It also handles for us networking and storage, so we don't have to worry about those issues.
-- gRPC for allowing other services to communicate with us. This is the go-to framework for internal
-  communications between services in this project.
-- Traefik as the ingress controller. It is used because it discovers when containers are started and stopped,
-  and can dynamically reconfigure itself to create and delete routes as those events happen.
+[Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
+we wanted a performant language that could be trusted with this job thanks to its compiler,
+and with support for the other technologies we use.
+
+Establishing communication to other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/) for allowing other services to communicate with us. This is the go-to framework for internal
+
+To handle containairized client applications. We chose [Docker](https://www.docker.com/) because we already
+knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
+It aditionally provides us easy networking and storage apis, so we don't have to worry about those issues.
+
+For this iteration, we used Docker as the execution engine. Through the rust crate [Bollard](https://crates.io/crates/bollard/), we can communicate with the Docker daemon through its API.
+Bollard is a quite powerful crate, and allows us to do everything we need for this iteration:
+
+- Starting and stopping containers
+- Managing images
+- Fetching logs
+- Fetching stats
+
+Once containers are spawned, they are exposed via [Traefik](https://traefik.io/traefik/).
+It is used because it discovers when containers are started and stopped, and can dynamically reconfigure itself to create and delete routes as those events happen.
 
 #### Web application
 
@@ -43,12 +51,8 @@ In the application manager, Pomegranate, the following technologies were used:
 
 #### Client applications deployment
 
-In this iteration, we decided to use Docker as the orchestrator for the client applications. 
+In this iteration, we decided to use Docker as the orchestrator for the client applications.
 This choice helped us to quickly set up the MVP and get a working product as soon as possible.
-
-However, we are aware that this choice is not the best one for the long term, as it is not greatly scalable nor very secure.
-As a matter of fact, we will implement Kubernetes as the orchestrator for the client applications in the next iteration.
-We also think of using MicroVM as a more secure alternative to containers. It is also easily integrable with Kubernetes through Firecracker.
 
 #### Database
 
@@ -114,25 +118,35 @@ api<--TCP/IP-->id1[(Database)]
 Pomegranate, our application manager, is responsible for starting, stopping and basically interacting with the client applications.
 It is also responsible for managing the networking of the applications.
 
-For this iteration, we used Docker as the execution engine. Through [Bollard](https://crates.io/crates/bollard/), a rust crate, we can communicate with the Docker daemon through its API.
-Bollard is a quite powerful crate, and allows us to do everything we need with Docker, such as:
-- Starting and stopping containers,
-- Creating networks,
-- Creating volumes,
-- Managing images,
-- Fetching logs,
-- Fetching stats
-
-Pomegranate is completely stateless, and the API is the only external way to interact with it. 
+Pomegranate is completely stateless, and the API is the only external way to interact with it.
 Once a container is started, Pomegranate does not keep track of it, and it is the responsibility of the execution engine to manage it.
+
+```mermaid
+flowchart TD
+    web[80]
+    webscure[443]
+    traefik[Traefik]
+    app_1[User app 1]
+    app_2[User app 2]
+    app_3[User app 3]
+
+    rules{Resolve\nvia labels}
+
+    webscure --> |HTTPS| traefik
+    web --> |HTTP| traefik
+    traefik --> rules
+
+    rules --> |uuid_1.user-app:80| app_1
+    rules --> |uuid_2.user-app:80| app_2
+    rules --> |uuid_3.user-app:80| app_3
+
+```
 
 To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to answer on 80 and 443 ports.
 Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
 
 TLS Termination is handled by Traefik, by resolving the DNS-O1 challenge with the TLS provider of choice. This allows to have a valid certificate for all subdomains of PaasTech.
 In this case, the provider is Porkbun.
-
-
 
 ## Post-mortem
 
