@@ -43,7 +43,12 @@ In the application manager, Pomegranate, the following technologies were used:
 
 #### Client applications deployment
 
-***TODO: [INFRA] fill for the architecture used to deploy clients' applications***
+In this iteration, we decided to use Docker as the orchestrator for the client applications. 
+This choice helped us to quickly set up the MVP and get a working product as soon as possible.
+
+However, we are aware that this choice is not the best one for the long term, as it is not greatly scalable nor very secure.
+As a matter of fact, we will implement Kubernetes as the orchestrator for the client applications in the next iteration.
+We also think of using MicroVM as a more secure alternative to containers. It is also easily integrable with Kubernetes through Firecracker.
 
 #### Database
 
