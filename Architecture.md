@@ -10,29 +10,28 @@
 
 #### Application manager
 
-The application manager, Pomegranate is charged with acting on containers' lifecycle.
+The application manager, Pomegranate is charged with acting on the containers' lifecycle.
 
 [Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
 we wanted a performant language that could be trusted with this job thanks to its compiler,
 and with support for the other technologies we use.
 
-Establishing communication to other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/) for allowing other services to communicate with us.
-This is the go-to framework for internal apis thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
+Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
+gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
 
-To handle containairized client applications. We chose [Docker](https://www.docker.com/) because we already
+To handle containerized client applications. We chose [Docker](https://www.docker.com/) because we already
 knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
-It aditionally provides us easy networking and storage apis, so we don't have to worry about those issues.
+It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
 
-Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/), we can communicate with the Docker daemon through its API.
-Bollard is a quite powerful crate, and allows us to do everything we need for this iteration:
+Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/).
+Bollard is quite a powerful crate that allows us to do everything we need for this iteration:
 
 - Starting and stopping containers
 - Managing images
-- Fetching logs
-- Fetching stats
+- Fetching logs and stats
 
 Once containers are spawned, they are exposed via [Traefik](https://traefik.io/traefik/).
-It is used because it discovers when containers are started and stopped, and can dynamically reconfigure itself to create and delete routes as those events happen.
+It is used because it discovers when containers are started/stopped and can dynamically reconfigure itself to create and delete routes as those events happen.
 
 #### Web application
 
@@ -116,7 +115,7 @@ api<--TCP/IP-->id1[(Database)]
 
 #### Client Applications
 
-Pomegranate, our application manager, is responsible for starting, stopping and basically interacting with the client applications.
+Pomegranate, our application manager, is responsible for starting, stopping, and interacting with the client applications.
 It is also responsible for managing the networking of the applications.
 
 Pomegranate is completely stateless, and the API is the only external way to interact with it.
@@ -146,7 +145,7 @@ flowchart TD
 To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to answer on 80 and 443 ports.
 Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
 
-TLS Termination is handled by Traefik, by resolving the DNS-O1 challenge with the TLS provider of choice. This allows to have a valid certificate for all subdomains of PaasTech.
+TLS Termination is handled by Traefik, by resolving the DNS-O1 challenge with the TLS provider of choice. This allows us to have a valid certificate for all subdomains of PaasTech.
 In this case, the provider is Porkbun.
 
 ## Post-mortem
@@ -159,6 +158,6 @@ In this case, the provider is Porkbun.
 
 **Lessons learned:**
 
-- Perhaps rust was not the best language to interact with Docker, since docker/kube has a first party API in Golang. We had a lot of Rust specific issues during development that slowed down how productive we were.
+- Perhaps Rust was not the best language to interact with Docker since docker/kube has a first-party API in Golang. We had a lot of Rust specific issues during development that slowed down how productive we were.
 - We defined poorly how our service should be interacted with, forcing us to adapt interfaces at the last minute.
-- Docker is far from ideal to build a PaaS on, a more reliable and secure option would be to user kubernetes, ideally with MicroVMs
+- Docker is far from ideal to build a PaaS on. A more reliable and secure option would be to use Kubernetes, ideally with MicroVMs.
