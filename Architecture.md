@@ -63,10 +63,6 @@ The architecture is as follows:
 
 ```mermaid
 erDiagram
-    USERS ||--o{ PROJECTS : manage
-    USERS ||--o{ SSH_KEYS : possess
-    PROJECTS ||--o{ DEPLOYMENTS : contain
-
     USERS {
         uuid id PK
         varchar(40) username UK
@@ -88,18 +84,14 @@ erDiagram
     PROJECTS {
         uuid id PK
         varchar(40) name
+        json config
         timestamp created_at
         timestamp updated_at "Nullable"
         uuid user_id FK
     }
-    DEPLOYMENTS {
-        uuid id PK
-        varchar(40) name
-        json config
-        timestamp created_at
-        timestamp updated_at "Nullable"
-        uuid project_id FK
-    }
+
+    USERS ||--o{ PROJECTS : manage
+    USERS ||--o{ SSH_KEYS : possess
 ```
 
 ### Detailed specification
