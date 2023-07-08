@@ -154,3 +154,11 @@ In this case, the provider is Porkbun.
 ### Organisational overview
 
 ***TODO: [UNIFIED WORK] from an organisation standpoint, how was the entire team organised, how did the squads interact***
+
+### Infrastructure
+
+**Lessons learned:**
+
+- Perhaps rust was not the best language to interact with Docker, since docker/kube has a first party API in Golang. We had a lot of Rust specific issues during development that slowed down how productive we were.
+- We defined poorly how our service should be interacted with, forcing us to adapt interfaces at the last minute.
+- Docker is far from ideal to build a PaaS on, a more reliable and secure option would be to user kubernetes, ideally with MicroVMs
