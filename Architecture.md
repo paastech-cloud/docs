@@ -8,30 +8,7 @@
 
 ### Technologies
 
-#### Application manager
-
-The application manager, Pomegranate is charged with acting on the containers' lifecycle.
-
-[Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
-we wanted a performant language that could be trusted with this job thanks to its compiler,
-and with support for the other technologies we use.
-
-Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
-gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
-
-To handle containerized client applications. We chose [Docker](https://www.docker.com/) because we already
-knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
-It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
-
-Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/).
-Bollard is quite a powerful crate that allows us to do everything we need for this iteration:
-
-- Starting and stopping containers
-- Managing images
-- Fetching logs and stats
-
-Once containers are spawned, they are exposed via [Traefik](https://traefik.io/traefik/).
-It is used because it discovers when containers are started/stopped and can dynamically reconfigure itself to create and delete routes as those events happen.
+***TODO: [UNIFIED WORK] define the different technologies below, why they were chosen, and use arguments AND PROOFS to show research***
 
 #### Web application
 
@@ -51,8 +28,29 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Client applications deployment
 
-In this iteration, we decided to use Docker as the orchestrator for the client applications.
+The application manager, Pomegranate is charged with acting on the containers' lifecycle.
+
+[Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
+we wanted a performant language that could be trusted with this job thanks to its compiler,
+and with support for the other technologies we use.
+
+Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
+gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
+
+To handle containerized client applications. We chose [Docker](https://www.docker.com/) because we already
+knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
+It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
 This choice helped us to quickly set up the MVP and get a working product as soon as possible.
+
+Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/).
+Bollard is quite a powerful crate that allows us to do everything we need for this iteration:
+
+- Starting and stopping containers
+- Managing images
+- Fetching logs and stats
+
+Once containers are spawned, they are exposed via [Traefik](https://traefik.io/traefik/).
+It is used because it discovers when containers are started/stopped and can dynamically reconfigure itself to create and delete routes as those events happen.
 
 #### Database
 
