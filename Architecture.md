@@ -16,13 +16,14 @@ The application manager, Pomegranate is charged with acting on containers' lifec
 we wanted a performant language that could be trusted with this job thanks to its compiler,
 and with support for the other technologies we use.
 
-Establishing communication to other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/) for allowing other services to communicate with us. This is the go-to framework for internal
+Establishing communication to other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/) for allowing other services to communicate with us.
+This is the go-to framework for internal apis thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
 
 To handle containairized client applications. We chose [Docker](https://www.docker.com/) because we already
 knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
 It aditionally provides us easy networking and storage apis, so we don't have to worry about those issues.
 
-For this iteration, we used Docker as the execution engine. Through the rust crate [Bollard](https://crates.io/crates/bollard/), we can communicate with the Docker daemon through its API.
+Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/), we can communicate with the Docker daemon through its API.
 Bollard is a quite powerful crate, and allows us to do everything we need for this iteration:
 
 - Starting and stopping containers
