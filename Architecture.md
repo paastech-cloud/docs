@@ -69,7 +69,30 @@ Apart from Cobra, other libraries are used in this tool, such as go-git, which a
 
 #### Client sign-up and login process
 
-***TODO: [CLIENT] mermaid diagram and description of the login process flow, for both the CLI and the web frontend***
+##### Login process
+
+###### CLI
+
+In order to login from the CLI tool, the user must have first created an account on the web frontend since the CLI tool does not allow for account creation. 
+
+The login process begins with the user typing the `paastech login` command which would prompt him to enter their email and password. The CLI tool then send a request to the API to get a JWT token. This token is stored locally in the user's config directory ($HOME/.config), and is used for all subsequent commands requiring to be authenticated. The token is valid for 6 hours, after which the user must login again.
+
+This process is illustrated in the following sequence diagram:
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant CLI
+    participant API
+    participant DB as PostgreSQL
+
+    User->>CLI: paastech login
+    CLI->>API: POST /auth/login
+    API->>DB: SELECT * FROM users WHERE ...
+    DB-->>API: {username: "...", etc.}
+    API-->>CLI: JWT token
+    CLI->>User: Logged in successfully
+```
 
 #### Projects storage
 
