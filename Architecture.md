@@ -124,18 +124,14 @@ How can we trigger the build of the image ? For a first version, we chose to use
 
 Some builders might not be able to build the code without configuration, hence, we need to be able to configure the buildpacks. To do so, the client can store a file called `buildpacks.json` in the `paastech` directory which will allow the user to configure the buildpacks. The file is a json file, which contains the configuration of the buildpacks. It is then used by the git hook to configure buildpacks. Here's the structure of the file:
 
-```json
-{
-  path: "myapp",
-  builder: "packetobuildpacks/builder:full",
-  buildpack: "packeto-buildpacks/web-server",
-  env: [
-    {
-        name: "PORT",
-        value: "8080"
-    }
-    ...
-  ],
+```yaml
+buildpacks:
+  path: "."
+  builder: "paketobuildpacks/builder:full"
+  buildpack: "paketo-buildpacks/web-servers"
+  env:
+    - "BP_WEB_SERVER=nginx"
+    - "BP_WEB_SERVER_ROOT=dist"
 }
 ```
 
@@ -143,6 +139,8 @@ Some builders might not be able to build the code without configuration, hence, 
 - `builder` is the builder to use to build the code
 - `buildpack` is the buildpack to use to build the code
 - `env` is the environment variables to pass to the buildpack
+
+The buildpacks are then configured using the `pack` cli, which is the cli of buildpacks. The script is made in bash for its simplicity and its portability. It is also well documented, and has a lot of libraries to help us build the script.
 
 #### Client Applications
 
