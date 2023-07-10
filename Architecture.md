@@ -113,7 +113,7 @@ api<--TCP/IP-->id1[(Database)]
 
 #### Client Applications
 
-Pomegranate, our application manager, is responsible for starting, stopping, and interacting with the client applications.
+Pomegranate is responsible for starting, stopping, and interacting with the client applications.
 It is also responsible for managing the networking of the applications.
 
 Pomegranate is completely stateless, and the API is the only external way to interact with it.
