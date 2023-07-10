@@ -158,4 +158,4 @@ In this case, the DNS registrar is Porkbun.
 
 - Rust might not have been the best language to interact with Docker since Docker/Kubernetes has a first-party API in Go. We had a lot of Rust specific issues during development that slowed down how productive we were.
 - We defined poorly how our service should be interacted with, forcing us to adapt interfaces at the last minute.
-- Docker is far from ideal to build a PaaS on. A more reliable and secure option would be to use Kubernetes, ideally with MicroVMs.
+- Docker is far from ideal to build a PaaS on. A more reliable and secure option would be to use Kubernetes, ideally with microVMs.
