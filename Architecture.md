@@ -47,7 +47,7 @@ Bollard is quite a powerful crate that allows us to do everything we need for th
 
 - Starting and stopping containers
 - Managing images
-- Fetching logs and stats
+- Fetching logs and resource usage
 
 Once containers are spawned, they are exposed via [Traefik](https://traefik.io/traefik/).
 It is used because it discovers when containers are started/stopped and can dynamically reconfigure itself to create and delete routes as those events happen.
