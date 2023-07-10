@@ -42,7 +42,7 @@ knew how to use it, and it is straightforward to communicate with the Docker ser
 It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
 This choice helped us to quickly set up the MVP and get a working product as soon as possible.
 
-Communication to the docker socket was achieved through the rust crate [Bollard](https://crates.io/crates/bollard/).
+Communication to the docker socket was achieved through the Rust crate [Bollard](https://crates.io/crates/bollard/).
 Bollard is quite a powerful crate that allows us to do everything we need for this iteration:
 
 - Starting and stopping containers
