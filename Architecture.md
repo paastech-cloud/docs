@@ -36,7 +36,9 @@
 
 #### CI/CD
 
-***TODO: [UNIFIED WORK] describe use of Github Actions as means of CI/CD***
+Each repository has a github action CI to execute tests before building and publishing Docker images.
+
+On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
 
 
 ## Architecture
