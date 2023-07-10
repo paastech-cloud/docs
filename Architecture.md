@@ -30,9 +30,9 @@
 
 Pomegranate, the application and deployment manager, is in charge of monitoring and managing the containers' lifecycle, as well as configuring them.
 
-[Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
-we wanted a performant language that could be trusted with this job thanks to its compiler,
-and with support for the other technologies we use.
+The [Rust](https://www.rust-lang.org/) programming language is used to develop the service. We used it because
+we wanted an efficient language that could be trusted with this job thanks to its compiled nature,
+and with support for the other technologies we use through the crates ecosystem.
 
 Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
 gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
