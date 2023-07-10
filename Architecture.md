@@ -79,4 +79,11 @@
 
 ### Organisational overview
 
-***TODO: [UNIFIED WORK] from an organisation standpoint, how was the entire team organised, how did the squads interact***
+All the work was split up into 3 teams of roughly equal size:
+ 
+- The `client/web api` team had the goal to create both frontends (a CLI and a small web ui) as well as building the REST API backend.
+- The `git controller` team was responsible for handling client code through git and building [OCI images](https://opencontainers.org) out of it.
+- The `infrastructure` team which was tasked with running images and exposing the client application to the user.
+
+All teams were originally formed using a preferential voting system, before getting slightly revised once we realized the real amount of work in each team.
+
