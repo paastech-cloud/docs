@@ -105,4 +105,4 @@ The git repo manager is a gRPC server which allows the API to manage git reposit
 
 ### Pomegranate
 
-Pomegranate is the scheduler for the clients applications. It is responsible for managing containers as long as their networking and load balancing them with [traefik](https://doc.traefik.io/traefik/). It uses the gRPC protocol to listen to incoming requests from the API. It is completely agnostic and will try to execute the commands it is told to run without checking the DB.
+Pomegranate is the scheduler for the clients applications. It is responsible for managing containers, their networking, and load balancing them with [Traefik](https://doc.traefik.io/traefik/). It uses the gRPC protocol to listen to incoming requests from the API. It is completely agnostic and will try to execute the commands it is told to run without checking the DB.
