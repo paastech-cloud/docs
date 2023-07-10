@@ -28,7 +28,7 @@
 
 #### Client applications deployment
 
-The application manager, Pomegranate is charged with acting on the containers' lifecycle.
+Pomegranate, the application and deployment manager, is in charge of monitoring and managing the containers' lifecycle, as well as configuring them.
 
 [Rust](https://www.rust-lang.org/) was used to develop the service. We used this programming language because
 we wanted a performant language that could be trusted with this job thanks to its compiler,
