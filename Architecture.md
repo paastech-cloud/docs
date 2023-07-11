@@ -111,7 +111,7 @@ Once the repositories are stored, the clients need to be able to push to them.
 
 In order to let the users push to thoses repositories, we need to give them access to the host machine. An easy solution would be to give them a ssh access to the host machine with servers like [sshd](https://www.openssh.com/). However, this would give them access to the whole host machine, which is not what we want. Indeed, we want to limit the access of the clients to their own repositories, and not to the whole host machine.
 
-One solution would be to use a git server like [gitea](https://gitea.io/en-us/) or [gitlab](https://about.gitlab.com/), which provide a full-fledged git service, with authentication and authorization. However, this would require to maintain a full git server, with possibly duplicated data, which is not the goal of PaaSTech.
+One solution would be to use a git server like [Gitea](https://gitea.io/en-us/) or [Gitlab](https://about.gitlab.com/), which provide a full-fledged git service, with authentication and authorization. However, this would require to maintain a full git server, with possibly duplicated data, which is not the goal of PaaSTech.
 
 The option we chose is to create a custom git server, which handles the authentication and authorization of the clients, and then execute only the command `git-receive-pack` which is used to push to a repository. This way, the clients can only push to their own repositories, and not to the whole host machine.
 
