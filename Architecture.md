@@ -89,7 +89,7 @@ Since it is separated it needs to communicate with the rest of the application. 
 
 We made the choice to use gRPC instead of a REST API. Indeed, since it uses [protobuf](https://developers.google.com/protocol-buffers), it is easier to maintain and to evolve as the application grows. It is also more performant than a REST API, and is easier to use, since it is strongly typed. It's supported on different languages also makes it easier to use. It also limits communication problems between teams and services, since the communication is well defined and documented through the protobuf file.
 
-It was made in rust for its high performance, reliability, robustness and memory safety using the [tonic](https://github.com/hyperium/tonic) framework, which is a rust implementation of gRPC. It was chosen because it is the most used gRPC framework in rust, and is well documented.
+It was made in Rust for its high performance, reliability, robustness and memory safety using the [tonic](https://github.com/hyperium/tonic) framework, which is a Rust implementation of gRPC. It was chosen because it is the most used gRPC framework in Rust, and is well documented.
 
 Here's an overview of the interactions of the git controller:
 
@@ -117,7 +117,7 @@ The option we chose is to create a custom git server, which handles the authenti
 
 The advantage of this solution is that it is lightweight and give us full control over the authentication and authorization of the clients. It also allows us to use the same authentication and authorization system as the rest of the application, which is easier to maintain.
 
-The git server is written in golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike rust which was the original choice. The libraries used are [ssh made by gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [gitea](https://about.gitea.com) to create their git server.
+The git server is written in golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike Rust which was the original choice. The libraries used are [ssh made by gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [gitea](https://about.gitea.com) to create their git server.
 
 The authentication and authorization process is the following:
 
