@@ -40,7 +40,7 @@ gRPC imposed itself as the go-to framework for internal APIs thanks to its [high
 To handle containerized client applications. We chose [Docker](https://www.docker.com/) because we already
 knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
 It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
-This choice helped us to quickly set up the MVP and get a working product as soon as possible.
+This choice helped us to quickly set up the MVP (Minimum Viable Product) and get a working product as soon as possible.
 
 Communication to the docker socket was achieved through the Rust crate [Bollard](https://crates.io/crates/bollard/).
 Bollard is quite a powerful crate that allows us to do everything we need for this iteration:
