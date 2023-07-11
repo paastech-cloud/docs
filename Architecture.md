@@ -77,7 +77,7 @@ We chose to use Git to store the code of the projects, because it is the most us
 
 ##### Creating and deleting repositories
 
-When a user initializes a new project, a new repository has to be created, it also has to be deleted when the project is deleted.
+When a Client initializes a new Project, a new Git repository has to be created; it also has to be deleted when the Project itself is deleted.
 
 The repository is created using the [git init](https://git-scm.com/docs/git-init) command. The repository is then stored in a directory, which is named after the **project's id**. It is stored on the host machine.
 
