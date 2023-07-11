@@ -115,7 +115,8 @@ One solution would be to use a git server like [gitea](https://gitea.io/en-us/) 
 
 The option we chose is to create a custom git server, which handles the authentication and authorization of the clients, and then execute only the command `git-receive-pack` which is used to push to a repository. This way, the clients can only push to their own repositories, and not to the whole host machine.
 
-The advantage of this solution is that it is lightweight and give us full control over the authentication and authorization of the clients. It also allows us to use the same authentication and authorization system as the rest of the application, which is easier to maintain.
+The advantage of this solution is that it is lightweight and gives us full control over the authentication and authorization of the clients.
+It also allows us to use the same authentication and authorization system as the rest of the Service, which is easier to maintain.
 
 The git server is written in golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike Rust which was the original choice. The libraries used are [ssh made by gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [gitea](https://about.gitea.com) to create their git server.
 
