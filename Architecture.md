@@ -141,9 +141,9 @@ The authentication and authorization process is the following:
 
 1. The client connects to the git server using SSH via `git push`
 2. The git server checks if the client is authenticated using the SSH key provided by the client by matching it against the SSH keys stored in the database.
-  * If the client is not authenticated, the connection is closed
+   1. If the client is not authenticated, the connection is closed
 3. The git server checks if the client is authorized to push to the repository by checking if the client is the owner of the repository.
-  * If the client is not authorized, the connection is closed
+   1. If the client is not authorized, the connection is closed
 4. The git server executes the command `git-receive-pack` which is used to push to a repository.
 
 ```mermaid
