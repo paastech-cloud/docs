@@ -73,7 +73,7 @@
 
 As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a [Git](https://git-scm.com/) repository, which is created upon Project creation. The repository is then exposed to the Client, who can push their code to it.
 
-We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using git.
+We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using Git.
 
 ##### Creating and deleting repositories
 
@@ -132,6 +132,7 @@ One solution would be to use a git server like [Gitea](https://gitea.io/en-us/) 
 The option we chose is to create a custom git server, which handles the authentication and authorization of the clients, and then execute only the command `git-receive-pack` which is used to push to a repository. This way, the clients can only push to their own repositories, and not to the whole host machine.
 
 The advantage of this solution is that it is lightweight and gives us full control over the authentication and authorization of the clients.
+
 It also allows us to use the same authentication and authorization system as the rest of the Service, which is easier to maintain.
 
 The git server is written in Golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike Rust which was the original choice. The libraries used are [ssh made by Gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [Gitea](https://about.gitea.com) to create their git server.
@@ -139,15 +140,14 @@ The git server is written in Golang, for its simplicity and its performance. It 
 The authentication and authorization process is the following:
 
 1. The client connects to the git server using SSH via `git push`
-2. The git server checks if the client is authenticated using the SSH key provided by the client by matching it against the SSH keys stored in the database
-    * If the client is not authenticated, the connection is closed
-3. The git server checks if the client is authorized to push to the repository by checking if the client is the owner of the repository
-    * If the client is not authorized, the connection is closed
-4. The git server executes the command `git-receive-pack` which is used to push to a repository
+2. The git server checks if the client is authenticated using the SSH key provided by the client by matching it against the SSH keys stored in the database.
+  * If the client is not authenticated, the connection is closed
+3. The git server checks if the client is authorized to push to the repository by checking if the client is the owner of the repository.
+  * If the client is not authorized, the connection is closed
+4. The git server executes the command `git-receive-pack` which is used to push to a repository.
 
 ```mermaid
 sequenceDiagram
-    participant Client
     participant GitServer
     participant Database
     participant HostMachine
@@ -155,7 +155,6 @@ sequenceDiagram
     Client->>GitServer: git-send-pack repository_name (git push)
     GitServer->>Database: Is the SSH key in the database?
     Database-->>GitServer: result
-    alt Authenticated
         GitServer->>Database: Is the SSH key linked to the repository ?
         Database-->>GitServer: result
         alt Authorized
@@ -166,18 +165,19 @@ sequenceDiagram
             GitServer-->>Client: Connection Closed (Not Authorized)
         end
     else Not Authenticated
-        GitServer-->>Client: Connection Closed (Not Authenticated)
     end
 ```
 
 ##### Building images
 
-Once the code is finally pushed to the repository, it needs to be built in order to be deployed. Since the strategy we chose is [Docker](https://www.docker.com/), the code needs to be built into a docker image.
+Once the code is finally pushed to the repository, it needs to be built in order to be deployed. Since the strategy we have chosen is [Docker](https://www.docker.com/), the code needs to be built into a docker image.
 
 In that essence, since the client code can be written in any language, we need to be able to build the code in any language. To do so, we use [buildpacks](https://buildpacks.io/), which is a tool to build code in any language into a docker image. It is used by [Heroku](https://www.heroku.com/) to build their applications.
 
 How can we trigger the build of the image? For a first version, we chose to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to trigger a bash script which will build the image on the host machine.
+
 This is not scalable, as the build is done on the host machine.
+
 It also poses questions about security risks since our SSH server needs to be able to access the docker daemon on the host machine. But it is a good first step to test the concept.
 
 Some builders might not be able to build the code without configuration, hence, we need to be able to configure the buildpacks. To do so, the client can store a file called `buildpacks.yaml` in the `paastech` directory which will allow the user to configure the buildpacks. The file is a yaml file, which contains the configuration of the buildpacks. It is then used by the git hook to configure buildpacks. Here's the structure of the file:
