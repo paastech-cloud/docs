@@ -24,7 +24,10 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 #### Client API
 
-The Client API, meaning the external API that Clients connect to and interact with, is made using [NestJS](https://nestjs.com/).
+
+The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that is writing any data in the shared database. It notifies Pomegranate each time a project needs to be deployed and lets a user add his SSH keys to be able to connect to the local Git server. Every user request is send and verified by the API before being carried out.
+
+With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [TypeScript](https://www.typescriptlang.org/) with [NestJS](https://nestjs.com/).
 Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
 out from the competition by proposing two things:
 first of all, a [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
@@ -58,6 +61,14 @@ With sending and receiving emails being an important part of this application fo
 ##### GRPC
 
 To communicate with the other services, especially pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its fast performance and low latency. It also allows us to easily create nest clients for the other services, which we can use to communicate with them. Another great advantages of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services, which made it easier to develop the services independently.
+
+##### SSH key
+
+To be able to push their projects onto the Git server, each user needs to associate at least one ssh key with their account. Using the command line, they will then be able to push their repositories to the server.
+
+##### Administrators
+In addition to the permissions of a normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username)- and even delete a Client.
+At the moment, it is not possible to get an administrator, as they don't have the right to modify other Client's information.
 
 #### Git controller
 
