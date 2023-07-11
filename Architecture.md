@@ -103,8 +103,8 @@ Once a container is started, Pomegranate does not keep track of it, and it is th
 
 ```mermaid
 flowchart TD
-    web[80]
-    webscure[443]
+    web([port 80])
+    webscure([port 443])
     traefik[Traefik]
     app_1[User app 1]
     app_2[User app 2]
