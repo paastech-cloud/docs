@@ -37,7 +37,7 @@ and with support for the other technologies we use through the crates ecosystem.
 Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
 gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
 
-To handle containerized client applications. We chose [Docker](https://www.docker.com/) because we already
+To handle containerized client applications, we chose [Docker](https://www.docker.com/) because we already
 knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
 It additionally provides us with easy networking and storage APIs, so we don't have to worry about those issues.
 This choice helped us to quickly set up the MVP (Minimum Viable Product) and get a working product as soon as possible.
