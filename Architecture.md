@@ -35,7 +35,10 @@ we wanted an efficient and reliable language that could be trusted with this job
 and with support for the other technologies we use through the crates ecosystem.
 
 Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
-gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance)
+gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance) compared to [HTTP performance](https://github.com/programatik29/rust-web-benchmarks/blob/master/result/hello-world.md#comparisons).
+The synthetic benchmarks show:
+ - gRPC performs ~25% more requests compared to HTTP on a single core
+ - gRPC scales better horizontally
 
 To handle containerized client applications, we chose [Docker](https://www.docker.com/) because we already
 knew how to use it, and it is straightforward to communicate with the Docker server to manage containers.
