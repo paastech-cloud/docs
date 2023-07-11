@@ -160,7 +160,9 @@ Once the code is finally pushed to the repository, it needs to be built in order
 
 In that essence, since the client code can be written in any language, we need to be able to build the code in any language. To do so, we use [buildpacks](https://buildpacks.io/), which is a tool to build code in any language into a docker image. It is used by [heroku](https://www.heroku.com/) to build their applications.
 
-How can we trigger the build of the image ? For a first version, we chose to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to trigger a bash script which will build the image on the host machine. This is not scalable, as the build is done on the host machine. It also poses questions about security risks since our ssh server needs to be able to access the docker daemon on the host machine. But it is a good first step to test the concept.
+How can we trigger the build of the image? For a first version, we chose to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to trigger a bash script which will build the image on the host machine.
+This is not scalable, as the build is done on the host machine.
+It also poses questions about security risks since our ssh server needs to be able to access the docker daemon on the host machine. But it is a good first step to test the concept.
 
 Some builders might not be able to build the code without configuration, hence, we need to be able to configure the buildpacks. To do so, the client can store a file called `buildpacks.json` in the `paastech` directory which will allow the user to configure the buildpacks. The file is a json file, which contains the configuration of the buildpacks. It is then used by the git hook to configure buildpacks. Here's the structure of the file:
 
