@@ -71,7 +71,7 @@
 
 ***TODO: [GIT] how are the projects stored and how is authentication handled upon push***
 
-As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a Git repository, which is created upon project creation. The repository is then exposed to the Client, who can push their code to it.
+As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a Git repository, which is created upon Project creation. The repository is then exposed to the Client, who can push their code to it.
 
 We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using git.
 
@@ -83,7 +83,7 @@ The repository is created using the [`git init`](https://git-scm.com/docs/git-in
 
 For now, it is not scalable, as the git repositories are stored on the host machine. In future version, the storage could be moved to a dedicated storage server, a distrubuted storage system or a bucket storage system.
 
-In that sense, to prepare for future versions, the git controller is a **separated component** from the rest of the application, designed to be **stateless**, and only stores the repositories on the host machine. It does not store any information about the repositories, and only uses the project's id to name the repository's directory. This way, the git controller can be scaled horizontally, and, if needed, the repositories can be stored on a dedicated storage server after adding a layer of authorization.
+In that sense, to prepare for future versions, the git controller is a **separated component** from the rest of the application, designed to be **stateless**, and only stores the repositories on the host machine. It does not store any information about the repositories, and only uses the **Project's id** to name the repository's directory. This way, the git controller can be scaled horizontally, and, if needed, the repositories can be stored on a dedicated storage server after adding a layer of authorization.
 
 Since it is separated it needs to communicate with the rest of the application. It was achieved using [gRPC](https://grpc.io/), which is a high performance RPC framework. It is used to create a bidirectional stream between the git controller and the rest of the application. The git controller can then receive commands from the rest of the application, and send back the result of the command.
 
