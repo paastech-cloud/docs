@@ -81,11 +81,13 @@ On top of that, the web UI is automatically deployed on [Github Pages](https://p
 
 ### Organisational overview
 
-All the work was split up into 3 teams of roughly equal size:
+In the beginning, we held a few meetings including everyone to specify all of the necessary functionalities. Due to high number of people we weren't really able to be as productive as we wanted but managed to create an overall specifications chart.
+
+Afterwards, the work was split up into 3 teams of roughly equal size:
  
 - The `client/web api` team had the goal to create both frontends (a CLI and a small web ui) as well as building the REST API backend.
 - The `git controller` team was responsible for handling client code through git and building [OCI images](https://opencontainers.org) out of it.
 - The `infrastructure` team which was tasked with running images and exposing the client application to the user.
 
-All teams were originally formed using a preferential voting system, before getting slightly revised once we realized the real amount of work in each team.
-
+All teams were originally formed using a preferential voting system, before getting slightly revised once we realized the real amount of work in each team. 
+This really improved our productivity, but nevertheless, we ran into multiple problems of miscommunication or lack of communication inside as well as between the different teams, slowing down our progress. After some time the communication got better and we managed to handle the links between each service. However, there is still progress to be made regarding this issue.
