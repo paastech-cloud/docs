@@ -158,7 +158,7 @@ sequenceDiagram
 
 Once the code is finally pushed to the repository, it needs to be built in order to be deployed. Since the strategy we chose is [Docker](https://www.docker.com/), the code needs to be built into a docker image.
 
-In that essence, since the client code can be written in any language, we need to be able to build the code in any language. To do so, we use [buildpacks](https://buildpacks.io/), which is a tool to build code in any language into a docker image. It is used by [heroku](https://www.heroku.com/) to build their applications.
+In that essence, since the client code can be written in any language, we need to be able to build the code in any language. To do so, we use [buildpacks](https://buildpacks.io/), which is a tool to build code in any language into a docker image. It is used by [Heroku](https://www.heroku.com/) to build their applications.
 
 How can we trigger the build of the image? For a first version, we chose to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to trigger a bash script which will build the image on the host machine.
 This is not scalable, as the build is done on the host machine.
