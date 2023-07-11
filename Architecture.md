@@ -32,9 +32,15 @@
 
 #### Database
 
-The chosen database for this application is [PostgreSQL](https://www.postgresql.org/). As market leader, PostgreSQL stands out for its performance and widespread use throughout the world.
+The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent data with relationships between each other as well as having structured data were a more important factor.
 
-The API connects to the database using an ORM called [Prisma](https://www.prisma.io/).
+The only flexible field is the environmental variables that are stored for each project, but since PostgreSQL supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
+
+
+The chosen database for this application is the free open-source database [PostgreSQL](https://www.postgresql.org/). As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. 
+
+
+The API connects to the database using an ORM called [Prisma](https://www.prisma.io/). Prisma also automates the generation & migration of the database as well as creates the classes associated to each table. Being an ORM that is both performant and allows the reorganisation of SQL data into simple classes, it was an important addition to our technology stack. Its complete documentation, active development and strong support made it more interesting than its competitors like [TypeORM](https://typeorm.io/) or [Objection js](https://vincit.github.io/objection.js/).
 
 #### CI/CD
 
