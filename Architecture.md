@@ -164,7 +164,7 @@ How can we trigger the build of the image? For a first version, we chose to use 
 This is not scalable, as the build is done on the host machine.
 It also poses questions about security risks since our ssh server needs to be able to access the docker daemon on the host machine. But it is a good first step to test the concept.
 
-Some builders might not be able to build the code without configuration, hence, we need to be able to configure the buildpacks. To do so, the client can store a file called `buildpacks.json` in the `paastech` directory which will allow the user to configure the buildpacks. The file is a json file, which contains the configuration of the buildpacks. It is then used by the git hook to configure buildpacks. Here's the structure of the file:
+Some builders might not be able to build the code without configuration, hence, we need to be able to configure the buildpacks. To do so, the client can store a file called `buildpacks.yaml` in the `paastech` directory which will allow the user to configure the buildpacks. The file is a yaml file, which contains the configuration of the buildpacks. It is then used by the git hook to configure buildpacks. Here's the structure of the file:
 
 ```yaml
 buildpacks:
@@ -174,7 +174,6 @@ buildpacks:
   env:
     - "BP_WEB_SERVER=nginx"
     - "BP_WEB_SERVER_ROOT=dist"
-}
 ```
 
 - `path` is the path to the directory containing the code to build
