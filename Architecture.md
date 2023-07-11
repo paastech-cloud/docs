@@ -116,11 +116,13 @@ flowchart TD
     web --> |HTTP| traefik
     traefik --> rules
 
-    rules --> |uuid_1.user-app:80| app_1
-    rules --> |uuid_2.user-app:80| app_2
-    rules --> |uuid_3.user-app:80| app_3
+    rules --> |**uuid_1**.user-app:80| app_1
+    rules --> |**uuid_2**.user-app:80| app_2
+    rules --> |**uuid_3**.user-app:80| app_3
 
 ```
+The [FQDN (Fully Qualified Domain Name)](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) is passed to Pomegranate via an environment variable.
+Doing so enables flexibility during the development process, as the developer can easily swap between a local and a production environment.
 
 To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to answer on 80 and 443 ports.
 Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
