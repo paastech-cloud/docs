@@ -83,13 +83,27 @@ The repository is created using the [git init](https://git-scm.com/docs/git-init
 
 For now, it is not scalable, as the git repositories are stored on the host machine. In future version, the storage could be moved to a dedicated storage server, a distrubuted storage system or a bucket storage system.
 
-In that sense, to prepare for future versions, the git controller is a separated component from the rest of the application, designed to be stateless, and only stores the repositories on the host machine. It does not store any information about the repositories, and only uses the project's id to name the repository's directory. This way, the git controller can be scaled horizontally, and, if needed, the repositories can be stored on a dedicated storage server after adding a layer of authorization.
+In that sense, to prepare for future versions, the git controller is a **separated component** from the rest of the application, designed to be **stateless**, and only stores the repositories on the host machine. It does not store any information about the repositories, and only uses the project's id to name the repository's directory. This way, the git controller can be scaled horizontally, and, if needed, the repositories can be stored on a dedicated storage server after adding a layer of authorization.
 
 Since it is separated it needs to communicate with the rest of the application. It was achieved using [gRPC](https://grpc.io/), which is a high performance RPC framework. It is used to create a bidirectional stream between the git controller and the rest of the application. The git controller can then receive commands from the rest of the application, and send back the result of the command.
 
 We made the choice to use gRPC instead of a REST API. Indeed, since it uses [protobuf](https://developers.google.com/protocol-buffers), it is easier to maintain and to evolve as the application grows. It is also more performant than a REST API, and is easier to use, since it is strongly typed. It's support on different languages also makes it easier to use. It also limits communication problematics between teams and services, since the communication is well defined and documented through the protobuf file.
 
 It was made in rust for its high performance, reliability, robustness and memory safety using the [tonic](https://github.com/hyperium/tonic) framework, which is a rust implementation of gRPC. It was chosen because it is the most used gRPC framework in rust, and is well documented.
+
+Here's an overview of the interactions of the git controller:
+
+```mermaid
+sequenceDiagram
+    participant API
+    participant GitRepoManager
+    participant HostMachine
+
+    API ->> GitRepoManager: CreateProject / DeleteProject
+    GitRepoManager ->> HostMachine: git init / rm -rf project_id
+    HostMachine -->> GitRepoManager: Ok
+    GitRepoManager -->> API: Ok
+```
 
 ##### Authentication
 
@@ -107,12 +121,37 @@ The git server is written in golang, for its simplicity and its performance. It 
 
 The authentication and authorization process is the following:
 
-- The client connects to the git server using ssh
+- The client connects to the git server using ssh via `git push`
 - The git server checks if the client is authenticated using the ssh key provided by the client by matching it against the ssh keys stored in the database
     - If the client is not authenticated, the connection is closed
 - The git server checks if the client is authorized to push to the repository by checking if the client is the owner of the repository
     - If the client is not authorized, the connection is closed
 - The git server executes the command `git-receive-pack` which is used to push to a repository
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant GitServer
+    participant Database
+    participant HostMachine
+
+    Client->>GitServer: git-send-pack repository_name (git push)
+    GitServer->>Database: Is the ssh key in the database?
+    Database-->>GitServer: result
+    alt Authenticated
+        GitServer->>Database: Is the ssh key linked to the repository ?
+        Database-->>GitServer: result
+        alt Authorized
+            GitServer->>HostMachine: Execute git-receive-pack
+            HostMachine-->>GitServer: Push Successful (from host)
+            GitServer-->>Client: Push Successful (continue)
+        else Not Authorized
+            GitServer-->>Client: Connection Closed (Not Authorized)
+        end
+    else Not Authenticated
+        GitServer-->>Client: Connection Closed (Not Authenticated)
+    end
+```
 
 ##### Building images
 
