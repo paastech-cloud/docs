@@ -4,7 +4,14 @@
 
 ### Description and intent
 
-***TODO: [UNIFIED WORK] write description of the software and its intent (what market needs it answers to)***
+PaaSTech is a self-hostable PaaS (Platform as a Service), that is centred around offering the developer a simple deployment and operational experience.
+Like every PaaS, the aim is to provide the users, in this case web developers, with an efficient and powerful way to package, deploy and expose their applications.
+
+The main features are:
+
+- a web UI to visualize and manage projects
+- a CLI to push and deploy the applications
+- easy configuration management for the deployed applications
 
 ### Technologies
 
