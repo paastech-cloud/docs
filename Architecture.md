@@ -46,6 +46,20 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which just released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
+##### Authentication strategies
+
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns a both an JWT HttpOnly cookie as well as a Bearer token. The cookies keep the user safe from XSS (Cross-Site Scripting) while the Bearer token allows users to log in via the CLI.
+
+
+##### Mail
+
+With sending and receiving emails being an important part of this application for the user, we needed a local way to test these functions without actually needing to connect it to a private email every time. After some search we came across [mailhog](https://github.com/mailhog/MailHog). Mailhog allows anyone to create a temporary local smtp server and send and receive emails through it. Even though you are not able to send emails to real email adresses, you can send and receive local emails, which allowed us to test our code.
+
+##### GRPC
+
+To communicate with the other services, especially pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its fast performance and low latency.
+
+
 #### Git controller
 
 ***TODO: [GIT] fill for the git controller and architecture***
