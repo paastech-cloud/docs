@@ -34,7 +34,7 @@
 
 The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent data with relationships between each other as well as having structured data were a more important factor.
 
-The only flexible field is the environmental variables that are stored for each project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
+The only flexible field is the environmental variables that are stored for each Project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
 
 As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is it free and open-source, it also allows also a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). Together with its flexibility and usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) as well as our prior experiences made it more interesting that its major competitor [MySQL](https://www.mysql.com/).
 
@@ -112,10 +112,10 @@ A nonce is a random value that is unique and serves for identification. Should t
 One User can have multiple projects or SSH keys.
 
 The `ssh_keys` specified by each User allow them to push their repository onto our git server. Each SSH key can have a name to make it easier to distinguish multiple keys, however, it is not required.
-An SSH key belongs to a Client and not a project. Thus, it will allow the Client to access any of their repositories. Should a User possess more than one SSH key, each one will grant them access.
+An SSH key belongs to a Client and not a Project. Thus, it will allow the Client to access any of their repositories. Should a User possess more than one SSH key, each one will grant them access.
 
 
-The `projects` table describes a Project. Its field `config` contains all the environmental variables of said Project, like a database URL. Since the configuration changes for every project, we decided to store it as a flexible json field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performances than a simple json field.
+The `projects` table describes a Project. Its field `config` contains all the environmental variables of said Project, like a database URL. Since the configuration changes for every Project, we decided to store it as a flexible json field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performances than a simple json field.
 
 
 ### Detailed specification
