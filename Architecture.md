@@ -249,7 +249,6 @@ Since the configuration changes for every Project, we decided to store it as a f
 
 ### Detailed specification
 
-
 #### Key constraints
 
 **_TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety_**
