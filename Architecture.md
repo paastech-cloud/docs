@@ -8,6 +8,10 @@
 
 ### Technologies
 
+Below are the technologies used for the different components of the application. We will discuss the choices that we made, and why the chosen technology fits in the ecosystem.
+
+A list of TPMs (Third-Party Modules) might be written to give more insight about the component, but please keep in mind those lists are non-exhaustive and only the main TPMs are described.
+
 **_TODO: [UNIFIED WORK] define the different technologies below, why they were chosen, and use arguments AND PROOFS to show research_**
 
 #### Web application
@@ -74,7 +78,31 @@ Apart from Cobra, other libraries are used in this tool, such as [`go-git`](http
 
 #### Client API
 
-**_TODO: [CLIENT] fill for the external API_**
+The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is sent and verified by the API before being carried out.
+
+With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [NestJS](https://nestjs.com/) with [TypeScript](https://www.typescriptlang.org/).
+Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
+out from the competition by proposing two things:
+1. A [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
+2. An [extensive documentation with code examples](https://docs.nestjs.com/) ranging from basics to difficult recipes to setup.
+
+NestJS' support modules provide a substantial support for the integration of well-known modules into the application. The main TPMs used for the API are:
+
+- `class-validator`: validation of DTOs (Data Transfer Objects) and their properties before they are handed out to NestJS controllers
+- `@nestjs/config`: ease of access to a config service, centralising both environment variables and `.env` files
+- `passport` and `passport-jwt` (along with `@nestjs/passport` and `@nestjs/jwt`): layer of abstraction to handle different authentication methods, such as JWTs, OAuth2 or OIDC. Here, only the JWTs are used.
+- `uuid`: generation of UUIDs v4, following [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122)
+- `nodemailer` with `handlebars`: sending of outbound emails through SMTP, with templating of HTML emails sent
+- `@nestjs/swagger` with CLI plugin: generation of OpenAPI specification (used by the web interface to generate API-related code) and running Swagger UI to simplify testing
+
+Moreover, all of the support that NestJS provides doesn't make it slower. Benchmarks open-sourced in v7.6.13 ([available here](https://github.com/nestjs/nest/blob/e7fa96022e8b8580413490101683aabe387ca9b9/benchmarks/all_output.txt)) gave the following comparison:
+
+- NestJS-express is nearly on par with Express for the average response time (`65.44 ms` versus `61.88 ms`)
+- NestJS-express is twice as fast in maximum response time (only `325 ms` against Express' `747 ms`)
+- NestJS-express can handle nearly twice as many requests concurrently, for the minimum amount doable (`14183 req/s` versus `8407 req/s`)
+- NestJS-express is on par with Express for the number of requests handled concurrently, for the average amount doable (`15640` versus `16454.41`)
+
+The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
 #### Git controller
 
@@ -303,17 +331,95 @@ An SSH key belongs to a Client and not a Project. Thus, the Client can access al
 The `projects` table describes a Project. Its `config` field contains all the environment variables of said Project, like a database URL. 
 Since the configuration changes for every Project, we decided to store it as a flexible JSON field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performance than a simple JSON field.
 
-### Detailed specification
-
 #### Key constraints
 
 **_TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety_**
 
-#### Client sign-up and login process
+#### Client API
 
-##### Login process
+##### Client states
 
-###### CLI
+When signing up, the client should provide an email address, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after it was active without a verified email for some time, although this is not implemented right now.
+
+```mermaid
+stateDiagram-v2
+    c : Created
+    v : Verified
+    d : Deleted
+    r : Reset mode
+
+    [*] --> c
+    d --> [*]
+
+    c --> v: email verification
+
+    c --> d: after some time
+
+    v --> r: password reset request
+    r --> v: password change
+
+    v --> d: account deletion request
+
+```
+
+##### Authentication strategies
+
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token.
+The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
+
+##### Mail
+
+Since sending and receiving emails is an important part of the user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email server every time.
+After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
+Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
+
+On the other hand, once PaaSTech is deployed and accessible to anyone, it was connected to an SMTP email server.
+
+##### GRPC
+
+To communicate with other services, especially Pomegranate and the git-repo-manager, we used [gRPC](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create NestJS gRPC clients in order to communicate with the other services. Another great advantage of gRPC is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the `.proto` files allowed us to define contracts between the services which made it easier to develop the services independently.
+
+##### SSH key
+
+To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account.
+Using the command line, they will then be able to push their repositories' code to the server.
+
+The API is responsible for the handling, storage and processing of the SSH keys. It acts as a "serving hatch" to store the keys in the database.
+The git ssh server will then query the database directly to use compare the SSH keys sent by the Client to the ones in the database.
+
+##### Administrators
+
+In addition to the permissions of normal users, administrators have a few extra perks. 
+Administrators are able to 
+- view the non-critical information of each user (email, username)
+- delete a user
+- view all SSH keys
+- view all existing projects
+
+Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
+To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
+At the moment, it is neither possible to become an administrator through the website, nor to appoint someone to this role.
+
+##### User Input Validation
+
+One of the most important parts of an API is to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
+This way, the type and other necessary rules are automatically checked before even executing the code of the application and should the verification fail, the API will return a `BAD REQUEST` error.
+
+##### Route protection
+
+To protect each route from attacks, we secured each endpoint with [guards](https://docs.nestjs.com/guards). These classes define the rules to access different endpoints. To allow for the best user experience while keeping our application protected, three types of routes have been established:
+
+- Public - accessible to everyone
+- Private - only accessible to connected Clients
+- Admin Only - only accessible to administrators
+
+Each time a Client connects to a protected endpoint, the API guards automatically check if they have the necessary authorization before taking the actual request. 
+
+##### Uniformity of response
+
+In order to ease the communication with the other services, the API needed to return a uniform response. By using [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data before it was sent to the Client. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
+
+#### CLI and login process
 
 In order to log in from the CLI tool, the Client must have first created an account on the web frontend since the CLI tool does not allow for account creation.
 This is intentional, and it ensures that creating an account cannot be automated. Using a website can also allow for more verifications, like [CAPTCHAs](https://en.wikipedia.org/wiki/CAPTCHA).
@@ -479,6 +585,7 @@ buildpacks:
 
 The buildpacks are then configured using the `pack` cli, which is the cli of buildpacks. The script is made in bash for its simplicity and its portability. It is also well documented, and has a lot of libraries to help us build the script.
 
+
 #### Client Applications
 
 Pomegranate is responsible for starting, stopping, and interacting with the client applications.
@@ -521,7 +628,14 @@ In this case, our DNS registrar is Porkbun, and our certificate authority is Let
 
 ### Organisational overview
 
-***TODO: [UNIFIED WORK] from an organisation standpoint, how was the entire team organised, how did the squads interact***
+### API
+
+This project introduced most members of the team to NestJS. Due to its well written documentation it was easily picked up and with the various modules it allows for good performance and automized a lot during development.
+The team could then apply best practices, like guards and interceptors, in order to develop more efficiently and with an overall better code quality.
+
+However, we had some problems concerning the API as a whole. In the beginning, the API was meant to only manage the users.
+A centralized controller should have managed the communication between the API, Pomegranate and the git server.
+However, as more and more time passed, the controller was completely erased and the API dealt with most of its responsibilities. This led to an important increase of the workload, especially since it already had some delay in the early stages of the development due to miscommunication.
 
 ### Infrastructure
 
