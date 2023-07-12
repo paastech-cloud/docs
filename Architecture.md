@@ -98,17 +98,17 @@ erDiagram
     USERS ||--o{ SSH_KEYS : possess
 ```
 
-As you can notice, every table has a uuid field as a primary key. Compared to `SERIAL` that is often used to identify a table, a uuid guarantees a better uniqueness across the database. A [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) may take up less space (4 bytes) than an [uuid](https://www.postgresql.org/docs/current/datatype-uuid.html) (16 bytes) but since it is a series of incrementing integers it offers information about the time of creation and makes it easier to guess the id whereas an uuid is generated randomly and nearly impossible to duplicate.
+As you can notice, every table has a UUID field as a primary key. Compared to `SERIAL` that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. A [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) may take up less space (4 bytes) than a [UUID](https://www.postgresql.org/docs/current/datatype-uuid.html) (16 bytes) but since it is a series of incrementing integers it offers information about the time of creation and makes it easier to guess the id whereas a UUID is generated randomly and is nearly impossible to duplicate.
 
 Furthermore, since the projects will be deployed at a subdomain that is named after `https://{projectId}.user-app.paastech.cloud` we needed to hide the internal database structure that emerges with a serial id. Therefore, using a uuid prevents sharing sensitive data with everyone and prevents targeted attacks.
 
 
 The table `users` contains all the necessary information about each user. Upon user creation, an `email_nonce` is automatically created and a user account is only considered active once the email has been confirmed and the field `email_nonce` is null.
-Should the user wish to reset his password, the field `password_nonce` will contain a unique uuid allowing the user to reset his password.
+Should the user wish to reset their password, a new UUID will be saved in the field `password_nonce`. To reset his password, the Client will need to provide said UUID together with the new password.
 One user can have multiple projects or SSH keys.
 
 The `ssh_keys` specified by each user allow them to push their repository onto our git server. Each SSH key can have a name to make it easier to distinguish multiple keys, however, it is not required.
-A SSH key belongs to a user, so it will have the same permissions as the user on all his repositories at the moment.
+An SSH key belongs to a user and not a project. Thus, it will allow the Client to access any of their repositories. Should a user possess more than one SSH key, every one will grant them access.
 
 
 The `projects` table describes a project. Its field `config` contains all the environmental variables of the user, like database authentication. since the configuration and necessary variables change for every project we decided to store it as a flexible json field. We decided to use a jsonb field that stores the json data in binary form, allowing for better performances than a simple json field. 
