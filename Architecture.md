@@ -12,7 +12,7 @@
 
 #### Web application
 
-The website is made using [React](https://react.dev/), we decided to use this framework because it is the most popular, widely used in industry and greatly documented. We also chose React since we are all familiar with it due to several past projects.
+The website is made using [React](https://react.dev/), we decided to use this framework because it is the most popular, widely used in industry and greatly documented. Furthermore, the whole team was already familiar with React thanks to several past projects.
 
 As for the component library, we chose [Chakra UI](https://chakra-ui.com/). Even though we didn't have any experience with it, we decided to try it out since it was visualy appealing and popular. It is also very well documented and supported by the community.
 
