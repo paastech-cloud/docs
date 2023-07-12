@@ -110,7 +110,15 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-**_TODO: [CLIENT] fill for the unified database schema_**
+The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database.
+For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent and structured data with relationships between different objects were more important factors.
+Moreover, the need for transactions is materialized in the fact that we are in a modular architecture. Transactions are the only way to ensure secure and complete actions between the different components.
+
+The only flexible field is the environment variables that are stored for each Project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JSONB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this was easy to implement.
+
+As a market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is it free and open-source, it also offers a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). All of this together with its flexibility, the usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) and our prior experiences made it a more interesting option that its major competitor [MySQL](https://www.mysql.com/).
+
+The API connects to the database using an ORM called [Prisma](https://www.prisma.io/). Prisma also automates the generation and migration of the database schema as well as creating the classes associated to each table. Being an ORM that is both performant and allows the reorganisation of SQL data into simple classes, it was an important addition to our technology stack. Its complete documentation, active development and strong support made it more interesting than its competitors like [TypeORM](https://typeorm.io/) or [Objection JS](https://vincit.github.io/objection.js/).
 
 #### CI/CD
 
@@ -121,7 +129,7 @@ It is used because it discovers when containers are started/stopped and can dyna
 ### Definitions
 
 - the Service refers to PaaSTech as a whole;
-- a Client is a user account created by an end user against the Service;
+- a Client (also referred to as a User) is a user account created by an end user against the Service;
 - a Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
 - an Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
 
@@ -232,7 +240,64 @@ As described previously, the API manages most of the user interactions and redir
 
 ### Database architecture
 
-**_TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README_**
+As the database is unified and serves as a focal point of the application, everything is contained in the same logical database.
+The architecture is as follows:
+
+```mermaid
+erDiagram
+    USERS {
+        uuid id PK
+        varchar(40) username UK
+        varchar(100) email UK
+        varchar(255) password
+        bool is_admin "Default false"
+        uuid email_nonce UK "Nullable, default uuid()"
+        uuid password_nonce UK "Nullable"
+        timestamp created_at
+        timestamp updated_at "Nullable"
+    }
+    SSH_KEYS {
+        uuid id PK
+        text value "public SSH key content"
+        varchar(30) name
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+    PROJECTS {
+        uuid id PK
+        varchar(40) name
+        jsonb config
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+
+    USERS ||--o{ PROJECTS : manage
+    USERS ||--o{ SSH_KEYS : possess
+```
+
+As you may notice, every table has a UUID field as a primary key. Compared to [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. 
+To generate a [UUID](https://www.postgresql.org/docs/current/datatype-uuid.html), we are using the UUIDv4 standard, which generates each UUID randomly. Thus, there are roughly 103 trillion UUIDv4s, lowering the chance of finding a duplicate UUID to one-in-a-billion. 
+In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column, effectively blocking the insertion of any new rows.
+Even though serials take up less space (4 bytes) than a UUID (16 bytes) , incrementing integers offers information about the order of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and impossible to guess, completely removing this attack pattern.
+
+
+Furthermore, since deployment URLs are built from the project id (`{projectId}.user-app.paastech.cloud`) , hiding the internal workings of the database was a requirement. 
+
+
+The table `users` contains all the necessary information about each Client. Upon User creation, an `email_nonce` is automatically created. A User is only considered active once the email has been confirmed, signified by the field `email_nonce` being set to null.
+A nonce is a random value that is unique and serves for identification. 
+Should the User wish to reset their password, a new UUID will be saved in the field `password_nonce`. The Client will need to provide said nonce together with the new password to finish the procedure.
+In the case of multiple reset requests, the field `password_nonce` gets overwritten each time. This ensures only the last request stays valid.
+Once the password has been reset, `password_nonce` will be set to null.
+
+The `ssh_keys` specified by each User allow them to push their repository onto our git server. Each SSH key can have a name to make it easier to distinguish multiple keys, however, it is not required.
+An SSH key belongs to a Client and not a Project. Thus, the Client can access all of their repositories via any of their keys.
+
+
+The `projects` table describes a Project. Its `config` field contains all the environment variables of said Project, like a database URL. 
+Since the configuration changes for every Project, we decided to store it as a flexible JSON field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performance than a simple JSON field.
 
 ### Detailed specification
 
