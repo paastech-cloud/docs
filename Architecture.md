@@ -133,7 +133,7 @@ Doing so enables flexibility during the development process, as the developer ca
 To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to listen to the 80 and 443 ports.
 Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
 
-TLS termination is handled by Traefik, by resolving the DNS-01 challenge with the TLS provider of choice. This allows us to have a valid certificate for all subdomains of PaaSTech.
+TLS termination is handled by Traefik. It manages resolving the DNS-01 challenge with the configured certificate authority. This allows us to have a valid certificate for all subdomains of PaaSTech.
 In this case, the DNS registrar is Porkbun.
 
 ## Post-mortem
