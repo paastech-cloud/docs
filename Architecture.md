@@ -48,7 +48,7 @@ Each repository has a GitHub Actions CI to execute format check, linter and test
 Most projects use our own Actions available in a [central repository](https://github.com/paastech-cloud/.github). 
 This ensures that all projects have the same CI/CD pipeline and that the CI/CD pipeline is easily maintainable.
 Moreover, thanks to Rust easy documentation creation process, a simple CI job is able to build the documentation and deploy it on [GitHub Pages](https://pages.github.com/) for every Rust project.
-Furthermore, at a tag push on main, or on a workflow call, a Docker image is build for any project. 
+Furthermore, at a tag push on main, or on a workflow call, a Docker image is built for every project that has this workflow set up.
 This image is then pushed as a repository package to the [GitHub Container Registry](https://ghrc.io) and is available for use.
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
