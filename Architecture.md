@@ -40,6 +40,7 @@ NestJS' support modules provide a substantial support for the integration of wel
 - `passport` and `passport-jwt` (along with `@nestjs/passport` and `@nestjs/jwt`): layer of abstraction to handle different authentication methods, such as JWTs, OAuth2 or OIDC. Here, only the JWTs are used.
 - `uuid`: generation of UUIDs v4, following [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122)
 - `nodemailer` with `handlebars`: sending of outbound emails through SMTP, with templating of HTML emails sent
+- `@nestjs/swagger` with CLI plugin: generation of OpenAPI specification (used by the web interface to generate API-related code) and running Swagger UI to simplify testing
 
 Moreover, all of the support that NestJS provides doesn't make it slower. Benchmarks open-sourced in v7.6.13 ([available here](https://github.com/nestjs/nest/blob/e7fa96022e8b8580413490101683aabe387ca9b9/benchmarks/all_output.txt)) gave the following comparison:
 
@@ -77,10 +78,11 @@ Administrators are able to
 - view the non-critical information of each user (email, username)
 - delete a user
 - view all SSH keys
+- view all existing projects
 
 Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
 To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
-At the moment, it is neither possible to become an administrator through the website, nor to appoint someone this role.
+At the moment, it is neither possible to become an administrator through the website, nor to appoint someone to this role.
 
 #### Git controller
 
