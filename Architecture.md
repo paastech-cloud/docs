@@ -35,7 +35,7 @@ We used it because we wanted an efficient and reliable language that could be tr
 Thanks to its compiler, we are driven to write better code that handles errors and memory safety is guaranteed.
 
 Furthermore, it supports the other technologies we use through the crates ecosystem.
-Crates are third-party packages providing additional functionalities and are managed by Cargo to track crates and their dependencies. 
+Crates are third-party packages that provides additional features. They are managed by Cargo, which handles dependency resolution and versioning.
 
 Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
 gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance) compared to [HTTP performance](https://github.com/programatik29/rust-web-benchmarks/blob/master/result/hello-world.md#comparisons).
