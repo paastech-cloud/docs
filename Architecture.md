@@ -43,19 +43,24 @@ The main features are:
 
 #### CI/CD
 
-Each repository has a github action CI to execute tests before building and publishing Docker images.
+Each repository has a GitHub Actions CI to execute format check, linter and tests at each push. This ensures a good code quality and a good test coverage for our entire project.
+
+Most projects use our own Actions available in a [central repository](https://github.com/paastech-cloud/.github). 
+This ensures that all projects have the same CI/CD pipeline and that the CI/CD pipeline is easily maintainable.
+Moreover, thanks to Rust easy documentation creation process, a simple CI job is able to build the documentation and deploy it on [GitHub Pages](https://pages.github.com/) for every Rust project.
+Furthermore, at a tag push on main, or on a workflow call, a Docker image is build for any project. 
+This image is then pushed as a repository package to the [GitHub Container Registry](https://ghrc.io) and is available for use.
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
-
 
 ## Architecture
 
 ### Definitions
 
-- the Service refers to PaaSTech as a whole;
-- a Client is a user account created by an end user against the Service;
-- a Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
-- an Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
+- The Service refers to PaaSTech as a whole;
+- A Client is a user account created by an end user against the Service;
+- A Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
+- An Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
 
 
 ### Component interaction
