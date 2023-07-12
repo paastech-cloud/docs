@@ -109,9 +109,13 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
-#### Git controller
+#### Git: controller & server
 
-**_TODO: [GIT] fill for the git controller and architecture_**
+The Git Controller was made in Rust for its high performance, reliability, robustness and memory safety using the [tonic](https://github.com/hyperium/tonic) framework, which is a Rust implementation of gRPC. It was chosen because it is the most used gRPC framework in Rust, and is well documented.
+
+We made the choice to use gRPC instead of a REST API. Indeed, since it uses [Protocol Buffers](https://developers.google.com/protocol-buffers), it is easier to maintain and to evolve as the application grows. It is also more performant than a REST API, and is easier to use, since it is strongly typed. It also limits communication problems between teams and services, since the communication is well-defined and documented through the Protocol Buffer file.
+
+The Git Server is written in Golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike Rust which was the original choice. The libraries used are [ssh made by Gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [Gitea](https://about.gitea.com) to create their git server.
 
 #### Client applications deployment
 
@@ -359,6 +363,8 @@ An SSH key belongs to a Client and not a Project. Thus, the Client can access al
 The `projects` table describes a Project. Its `config` field contains all the environment variables of said Project, like a database URL. 
 Since the configuration changes for every Project, we decided to store it as a flexible JSON field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performance than a simple JSON field.
 
+### Detailed specification
+
 #### Client API
 
 ##### Client states
@@ -496,10 +502,6 @@ In that sense, to prepare for future versions, the git controller is a **separat
 
 Since the git controller is separated from the other components, it needs a way to communicate with the API. This was achieved using [gRPC](https://grpc.io/), which is a high performance RPC framework. It is used to create an interface other services can consume. The git controller can then receive commands from the rest of the services and execute shell commands to delete directories and git commands to initialize repositories.
 
-We made the choice to use gRPC instead of a REST API. Indeed, since it uses [Protocol Buffers](https://developers.google.com/protocol-buffers), it is easier to maintain and to evolve as the application grows. It is also more performant than a REST API, and is easier to use, since it is strongly typed. It also limits communication problems between teams and services, since the communication is well-defined and documented through the Protocol Buffer file.
-
-The Git Controller was made in Rust for its high performance, reliability, robustness and memory safety using the [tonic](https://github.com/hyperium/tonic) framework, which is a Rust implementation of gRPC. It was chosen because it is the most used gRPC framework in Rust, and is well documented.
-
 Here's an overview of the interactions of the git controller:
 
 1. Creation of a repository
@@ -541,10 +543,7 @@ One solution would be to use a git server like [Gitea](https://gitea.io/en-us/) 
 The option we chose is to create a custom git server, which handles the authentication and authorization of the clients, and then execute only the command `git-receive-pack` which is used to push to a repository. This way, the clients can only push to their own repositories, and not to the whole host machine.
 
 The advantage of this solution is that it is lightweight and gives us full control over the authentication and authorization of the clients.
-
 It also allows us to use the same authentication and authorization system as the rest of the Service, which is easier to maintain.
-
-The git server is written in Golang, for its simplicity and its performance. It is also well documented, and has a lot of libraries to help us build the server, unlike Rust which was the original choice. The libraries used are [ssh made by Gliderlabs](https://github.com/gliderlabs/ssh) which is used to create git clients and servers. It is also used by [Gitea](https://about.gitea.com) to create their git server.
 
 The authentication and authorization process is the following:
 
