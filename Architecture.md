@@ -23,6 +23,7 @@ All of this makes Axios one of the most straightforward solutions to use.
 To simplify the development of the connection with the API, our team has used the [OpenAPI Generator](https://openapi-generator.tech/) tool which generated TypeScript objects and functions for every controller and endpoint in our API. The auto-generated code uses Axios to send requests, and is based on the OpenAPI specification of the API which was conveniently provided to us by NestJS once we added the `SwaggerModule`.
 
 **Website structure**
+
 The web application offers to users several public and protected routes, which give access to the main PaaSTech features. 
 
 An anonymous user can view:
@@ -60,6 +61,7 @@ flowchart LR
     L -->|settings| O(SettingsTab)
 ```
 As was said earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The routes which allow users to access their profile and projects are obviously not available for anonymous visitors.
+
 #### CLI (Command-Line Interface)
 
 ***TODO: [CLIENT] fill for the cli***
