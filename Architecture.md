@@ -86,22 +86,22 @@ At the moment, it is neither possible to become an administrator through the web
 
 ##### User Input Validation
 
-One of the most important parts of an API is, to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors occuring. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
+One of the most important parts of an API is, to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors occurring. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
 This way, the type and other necessary rules are automatically checked before even executing the code of the application and should the verification fail, the API will return a `BAD REQUEST` error.
 
 ##### Route protection
 
-With NestJS' allowing to create [guards](https://docs.nestjs.com/guards), classes that define the rules to access different endpoints, three types of routes have been established : 
+To protect each route from attacks, we secured each endpoint with [guards](https://docs.nestjs.com/guards). These classes define the rules to access different endpoints. To allow for the best user experience while keeping our application protected, three types of routes have been established:
 
 - Public - accessible to everyone
 - Private - only accessible to connected Clients
 - Admin Only - only accessible to administrators
 
-This system allowed to automise the security verification before each route.
+Each time a Client connects to the API to a protected endpoint, the guards automatically check if they have the necessary authorization before taking the actual request. 
 
 ##### Uniformity of response
 
-By using NestJS' [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data and uniform the responses in order to ease the communication with the other services. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
+In order to ease the communication with the other services, the API needed to return a uniform response. By using [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data before it was sent to the Client. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
 
 
 #### Git controller
@@ -376,9 +376,9 @@ In this case, our DNS registrar is Porkbun, and our certificate authority is Let
 
 ### API
 
-This project introduced most members of the team to NestJS. Due to its well written documentation it was easily picked up and with the various modules it allows for good performance and automised a lot during development.
+This project introduced most members of the team to NestJS. Due to its well written documentation it was easily picked up and with the various modules it allows for good performance and automized a lot during development.
 
-At the beginning, the API was meant to only manage the users. A centralized controller should have managed the communication between the API, Pomegranate and the git server. However, as more and more time passed, the controller was completly erased and the API dealt with most of its responsibilities. This led to an important increase of workload, especially since it already had some delay in the early stages of the development due to miscommunication.
+However, we had some problems concerning the API as a whole. In the beginning, the API was meant to only manage the users. A centralized controller should have managed the communication between the API, Pomegranate and the git server. However, as more and more time passed, the controller was completely erased and the API dealt with most of its responsibilities. This led to an important increase of the workload, especially since it already had some delay in the early stages of the development due to miscommunication.
 
 
 ### Infrastructure
