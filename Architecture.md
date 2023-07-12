@@ -34,11 +34,9 @@
 
 The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent data with relationships between each other as well as having structured data were a more important factor.
 
-The only flexible field is the environmental variables that are stored for each project, but since PostgreSQL supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
+The only flexible field is the environmental variables that are stored for each project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
 
-
-The chosen database for this application is the free open-source database [PostgreSQL](https://www.postgresql.org/). As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. 
-
+As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is free and open-source, it allows also a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). Together with its flexibility and usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) as well as our prior experiences made it more interesting that its major competitor [MySQL](https://www.mysql.com/).
 
 The API connects to the database using an ORM called [Prisma](https://www.prisma.io/). Prisma also automates the generation & migration of the database as well as creates the classes associated to each table. Being an ORM that is both performant and allows the reorganisation of SQL data into simple classes, it was an important addition to our technology stack. Its complete documentation, active development and strong support made it more interesting than its competitors like [TypeORM](https://typeorm.io/) or [Objection js](https://vincit.github.io/objection.js/).
 
