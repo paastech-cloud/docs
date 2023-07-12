@@ -30,8 +30,8 @@ The Client API is one of the fundamental parts of our project. It not only handl
 With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [TypeScript](https://www.typescriptlang.org/) with [NestJS](https://nestjs.com/).
 Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
 out from the competition by proposing two things:
-first of all, a [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
-then, an [extensive documentation with code examples](https://docs.nestjs.com/) ranging from basics to difficult recipes to setup.
+1. A [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
+2. An [extensive documentation with code examples](https://docs.nestjs.com/) ranging from basics to difficult recipes to setup.
 
 NestJS' support modules provide a substantial support for the integration of well-known modules into the application. The main TPMs used for the API are:
 
@@ -53,19 +53,22 @@ The API is currently running on NestJS-express v10.0.3, which has just been rele
 
 ##### Authentication strategies
 
-Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token. The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token.
+The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
 
 ##### Mail
 
-Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time. After some search we came across [mailhog](https://github.com/mailhog/MailHog). Mailhog allows anyone to create a temporary local smtp server and send and receive emails through it. Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
+Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time.
+After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
+Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
 
 ##### GRPC
 
-To communicate with other services, especially Pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create nest clients in order to communicate with the other services. Another great advantage of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services which made it easier to develop the services independently.
+To communicate with other services, especially Pomegranate and the git-repo-manager, we used [gRPC](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create NestJS gRPC clients in order to communicate with the other services. Another great advantage of gRPC is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the `.proto` files allowed us to define contracts between the services which made it easier to develop the services independently.
 
 ##### SSH key
 
-To be able to push their projects onto the Git server, each user needs to associate at least one ssh key with their account. Using the command line, they will then be able to push their repositories to the server.
+To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account. Using the command line, they will then be able to push their repositories' code to the server.
 
 ##### Administrators
 
@@ -76,8 +79,8 @@ Administrators are able to
 - view all SSH keys
 
 Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
-To avoid polluating the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
-At the moment it is neither possible to become an administrator through the website nor to appoint someone this role.
+To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
+At the moment, it is neither possible to become an administrator through the website, nor to appoint someone this role.
 
 #### Git controller
 
@@ -117,7 +120,7 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-The chosen database for this application is [PostgreSQL](https://www.postgresql.org/). As market leader, PostgreSQL stands out for its performance and widespread use throughout the world.
+The chosen database for this application is [PostgreSQL](https://www.postgresql.org/). As a market leader, PostgreSQL stands out for its performance and widespread use throughout the world.
 
 The API connects to the database using an ORM called [Prisma](https://www.prisma.io/).
 
@@ -150,7 +153,7 @@ The API connects to the database using an ORM called [Prisma](https://www.prisma
 
 ##### Client states
 
-When signing up, the client should provide an email, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after some time of an account being active without a verified email, although this is not implemented for now.
+When signing up, the client should provide an email address, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after some time of an account being active without a verified email, although this is not implemented for now.
 
 ```mermaid
 stateDiagram-v2
