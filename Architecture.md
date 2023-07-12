@@ -77,8 +77,8 @@ In addition to the permissions of normal users, administrators have a few extra 
 Administrators are able to 
 - view the non-critical information of each user (email, username)
 - delete a user
-- view every SSH keys
-- view every existing projects
+- view all SSH keys
+- view all existing projects
 
 Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
 To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
