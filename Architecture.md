@@ -116,7 +116,9 @@ flowchart LR
     end
 ```
 
-In this schema, we can see the different components interacting with each other. We decided, for this first iteration, to split services as much as we could to allow for a more modular architecture. This allows us to easily replace a component if needed, and to scale the different components independently.
+In this schema, we can see the different components interacting with each other.
+
+For this first iteration, we decided to split services to allow for a modular architecture. Doing so allows us to easily replace a component if needed, and to scale each component independently.
 
 - The client API is the main component that will be used by the clients to interact with the service. This API will then interact with the Git controller to create repositories and with Pomegranate to create Docker deployments, and with the database to store the data.
 - The Git controller will interact with the host file system to create repositories, and with the local container registry to push images.
