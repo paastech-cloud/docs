@@ -176,9 +176,11 @@ On top of that, the web UI is automatically deployed on [Github Pages](https://p
 #### Deployment
 
 To deploy every application of PaaSTech on a single machine, a `docker-compose.yml` was made alongside a `setup.sh` script to set up the host machine easily and deploy the entire project.
-As of today, PaaSTech is not scalable and is not meant to be deployed on multiple machines. 
-Furthermore, even if the setup script does a bit of configuration, some folder are still needed to be created manually, the `.env` file needs to be filled and a [custom script](https://github.com/paastech-cloud/git-repo-manager/blob/main/hooks/post-receive) must be added in a specific directory on the host machine (`/srv/hooks` by default). 
+As of today, PaaSTech is not scalable and is not meant to be deployed on multiple machines.
+
+Furthermore, even if the setup script does a bit of configuration, some folders still have to be created manually, the `.env` file needs to be filled and a [custom script](https://github.com/paastech-cloud/git-repo-manager/blob/main/hooks/post-receive) must be added in a specific directory on the host machine (`/srv/hooks` by default). 
 This deployment method is available in [PaaSTech' `infra` repository](https://github.com/paastech-cloud/infra).
+
 In this `docker-compose.yml`, we create 2 networks, one for the internal applications, and one for the client applications.
 Each application is then deployed in a container, with environment variables that can be set up by the user in the `.env` file, and volumes as needed.
 This file also ensures that:
