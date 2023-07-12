@@ -127,11 +127,12 @@ flowchart TD
     rules --> |**uuid_3**.user-app:80| app_3
 
 ```
-The [FQDN (Fully Qualified Domain Name)](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) is passed to Pomegranate via an environment variable.
-Doing so enables flexibility during the development process, as the developer can easily swap between a local and a production environment.
 
 To expose newly spawned containers to the World Wide Web, [Traefik](https://doc.traefik.io/traefik/) is configured to listen to the 80 and 443 ports.
 Then a set of labels is attributed to each container to create a unique subdomain `<app_uuid>.user-app.<fqdn>` redirecting to the port 80 of the associated app.
+
+Pomegranate receives a domain name as an environment variable. 
+Doing so enables flexibility during the development and deployment process, as the developer can easily swap between a localhost environment (`<uuid>.user-app.localhost`) and a production environment (`<uuid>.user-app.paastech.cloud`).
 
 TLS termination is handled by Traefik. It manages resolving the DNS-01 challenge with the configured certificate authority. This allows us to have a valid certificate for all subdomains of PaaSTech.
 In this case, our DNS registrar is Porkbun, and our certificate authority is Let's Encrypt.
