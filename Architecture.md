@@ -121,7 +121,7 @@ In this schema, we can see the different components interacting with each other.
 For this first iteration, we decided to split services to allow for a modular architecture. Doing so allows us to easily replace a component if needed, and to scale each component independently.
 
 - The client API is the main component that is used by the clients to interact with the service. This API communicates with the Git controller for repositories management, with Pomegranate to create Docker deployments and with the database to store the data.
-- The Git controller will interact with the host file system to create repositories, and with the local container registry to push images.
+- The Git controller interacts with the host file system to create repositories, and with the local container registry to push images.
 - Pomegranate, our deployment manager, will interact with the local container registry to pull images and with the host file system to create deployments.
 
 Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components, as well as a more secure one, as the communication is done through a private network. While the HTTP requests allows us easier access to the API.
