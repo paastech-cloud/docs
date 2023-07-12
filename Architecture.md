@@ -60,11 +60,11 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent data with relationships between each other as well as having structured data were a more important factor.
+The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent and structured data with relationships between different objects were a more important factor.
 
 The only flexible field is the environmental variables that are stored for each Project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JsonB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this could easily be implemented.
 
-As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is it free and open-source, it also allows also a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). Together with its flexibility and usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) as well as our prior experiences made it more interesting that its major competitor [MySQL](https://www.mysql.com/).
+As market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is it free and open-source, it also offers a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). All of this together with its flexibility, the usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) and our prior experiences made it a more interesting option that its major competitor [MySQL](https://www.mysql.com/).
 
 The API connects to the database using an ORM called [Prisma](https://www.prisma.io/). Prisma also automates the generation and migration of the database as well as creating the classes associated to each table. Being an ORM that is both performant and allows the reorganisation of SQL data into simple classes, it was an important addition to our technology stack. Its complete documentation, active development and strong support made it more interesting than its competitors like [TypeORM](https://typeorm.io/) or [Objection JS](https://vincit.github.io/objection.js/).
 
@@ -228,15 +228,15 @@ erDiagram
 
 As you can notice, every table has a UUID field as a primary key. Compared to [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. 
 To generate a [UUID](https://www.postgresql.org/docs/current/datatype-uuid.html), we are using the UUIDv4 standard, which generates each UUID randomly. Thus, there are roughly 103 trillion UUIDv4s, lowering the chance of finding a duplicate UUID to one-in-a-billion. 
-In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column and be reduntant. As the column is a primary key, this results in the table being full and creates an inability to insert new rows. 
-However, even though serials take up less space (4 bytes) than a UUID (16 bytes), the column becomes a series of incrementing integers and offers information about the time of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and impossible to guess, completely removing this attack pattern.
+In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column and become redundant. As the column is a primary key, this results in the table being full and creates an inability to insert new rows. 
+Even though serials take up less space (4 bytes) than a UUID (16 bytes), the column becomes a series of incrementing integers and offers information about the time of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and are impossible to guess, completely removing this attack pattern.
 
 
-Furthermore, since the projects will be deployed at a subdomain that is named after `{projectId}.user-app.paastech.cloud` we needed to hide the internal database structure that emerges with a serial id. Therefore, using a uuid prevents sharing sensitive data with everyone and prevents targeted attacks.
+Furthermore, since the projects will be deployed at a subdomain that is named after `{projectId}.user-app.paastech.cloud` we needed to hide the internal database structure that emerges with a serial id. Therefore, using a UUID prevents sharing sensitive data and targeted attacks.
 
 
 The table `users` contains all the necessary information about each User. Upon User creation, an `email_nonce` is automatically created and a Client account is only considered active once the email has been confirmed and the field `email_nonce` is null.
-A nonce is a random value that is unique and serves for identification. Should the User wish to reset their password, a new UUID will be saved in the field `password_nonce`. To reset his password, the Client will need to provide said nonce together with the new password. Should another request to change the password been made before the password was reset, a new nonce will be generated and the old one will be overwritten. Once the password has been reset, `password_nonce` will be set to null. 
+A nonce is a random value that is unique and serves for identification. Should the User wish to reset their password, a new UUID will be saved in the field `password_nonce`. To reset his password, the Client will need to provide said nonce together with the new password. Should another request to change the password be made before the password was reset, a new nonce will be generated and the old one will be overwritten. Once the password has been reset, `password_nonce` will be set to null. 
 One User can have multiple projects or SSH keys.
 
 The `ssh_keys` specified by each User allow them to push their repository onto our git server. Each SSH key can have a name to make it easier to distinguish multiple keys, however, it is not required.
