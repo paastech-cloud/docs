@@ -32,7 +32,7 @@ Pomegranate, the application and deployment manager, is in charge of monitoring 
 
 The [Rust](https://www.rust-lang.org/) programming language is used to develop the service.
 We used it because we wanted an efficient and reliable language that could be trusted.
-Thanks to its strict compiler, we are forced to write better code that handle errors and we get extreme memory safety.
+Thanks to its compiler, we are driven to write better code that handles errors and memory safety is guaranteed.
 
 Furthermore, it supports the other technologies we use through the crates ecosystem.
 Crates are third-party packages providing additional functionalities and are managed by Cargo to track crates and their dependencies. 
