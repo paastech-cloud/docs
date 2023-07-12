@@ -96,6 +96,30 @@ In this schema we can see many different component interacting with each other. 
 
 Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components, as well as a more secure one, as the communication is done through a private network. While the http requests allows us easier access to the API.
 
+
+To understand their interactions better, wa can look at an example of a project deployment of a Client.
+
+```mermaid
+sequenceDiagram
+    Client->>+API: create project
+    API->>+Database: create project
+    Database->>+API: OK
+    API->>+Client: OK
+    Client->>+API: Create SSH key
+    API->>+Database: Create new SSH key
+    Database->>+API: OK
+    API->>+Client: OK
+    Client->>+Git Repository Manager: Push project
+    Git Repository Manager->>+Git Server: Store project
+    Git Repository Manager->>+Docker registry: Build & save image
+    Git Repository Manager->>+ Client: OK
+    Client->>+API: Deploy project
+    API->>+Pomegranate: Deploy project
+    Pomegranate->>+Docker registry: get image
+    Pomegranate->>+API: OK
+    API->>+Client: OK
+```
+
 ### Database architecture
 
 **_TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README_**
