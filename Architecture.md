@@ -69,8 +69,6 @@
 
 #### Projects storage
 
-***TODO: [GIT] how are the projects stored and how is authentication handled upon push***
-
 As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a [Git](https://git-scm.com/) repository, which is created upon Project creation. The repository is then exposed to the Client, who can push their code to it.
 
 We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using Git.
