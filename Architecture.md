@@ -53,6 +53,7 @@ This image is then pushed as a repository package to the [GitHub Container Regis
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
 
+#### Deployment
 To deploy every application of PaaSTech in a single machine, a `docker-compose.yml` was made alongside a `setup.sh` script to set up the host machine easily and deploy the entire project. 
 They are both available in [the `infra` repository](https://github.com/paastech-cloud/infra).
 In this `docker-compose.yml`, we create 2 networks, one for the internal applications, and one for the client applications.
