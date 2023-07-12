@@ -4,27 +4,27 @@
 
 ### Description and intent
 
-***TODO: [UNIFIED WORK] write description of the software and its intent (what market needs it answers to)***
+**_TODO: [UNIFIED WORK] write description of the software and its intent (what market needs it answers to)_**
 
 ### Technologies
 
-***TODO: [UNIFIED WORK] define the different technologies below, why they were chosen, and use arguments AND PROOFS to show research***
+**_TODO: [UNIFIED WORK] define the different technologies below, why they were chosen, and use arguments AND PROOFS to show research_**
 
 #### Web application
 
-***TODO: [CLIENT] fill for web application frontend***
+**_TODO: [CLIENT] fill for web application frontend_**
 
 #### CLI (Command-Line Interface)
 
-***TODO: [CLIENT] fill for the cli***
+**_TODO: [CLIENT] fill for the cli_**
 
 #### Client API
 
-***TODO: [CLIENT] fill for the external API***
+**_TODO: [CLIENT] fill for the external API_**
 
 #### Git controller
 
-***TODO: [GIT] fill for the git controller and architecture***
+**_TODO: [GIT] fill for the git controller and architecture_**
 
 #### Client applications deployment
 
@@ -60,12 +60,11 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-***TODO: [CLIENT] fill for the unified database schema***
+**_TODO: [CLIENT] fill for the unified database schema_**
 
 #### CI/CD
 
-***TODO: [UNIFIED WORK] describe use of Github Actions as means of CI/CD***
-
+**_TODO: [UNIFIED WORK] describe use of Github Actions as means of CI/CD_**
 
 ## Architecture
 
@@ -76,24 +75,124 @@ It is used because it discovers when containers are started/stopped and can dyna
 - a Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
 - an Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
 
-
 ### Component interaction
 
-***TODO: [UNIFIED WORK] mermaid diagram of how components interact with eachother***
+```mermaid
+flowchart LR
+    cli["CLI"]
+
+    web <-- HTTP --> api
+    cli <-- HTTP --> api
+    cli <-- Git over SSH --> ssh
+
+
+    subgraph Github Pages
+        web["Web Frontend"]
+    end
+
+    subgraph PaaSTech internal services
+        api["API"]
+        git["Git controller"]
+        ssh["OpenSSH server"]
+        pom["Pomegranate"]
+        db[(PostgreSQL)]
+        fs[("`Host filesystem`")]
+        docker(["Docker"])
+        cr(["`Local container registry`"])
+
+        api -. gRPC .-> git
+        api -. gRPC .-> pom
+        api -. SQL .-> db
+
+        git -. manages repositories .-> fs
+        ssh -. git receive-pack .-> fs
+        ssh -. push images .-> cr
+
+        pom -. manages deployments .-> docker
+
+        docker -. use images .-> cr
+
+        cr === fs
+    end
+```
+
+In this schema, we can see the different components interacting with each other.
+
+For this first iteration, we decided to split services to allow for a modular architecture. Doing so allows us to easily replace a component if needed, and to scale each component independently.
+
+- The client API is the main component that is used by the clients to interact with the service. This API communicates with the Git controller for repositories management, with Pomegranate to create Docker deployments and with the database to store the data.
+- The Git controller interacts with the host file system to create repositories, and with the local container registry to push images.
+- Pomegranate interacts with the local container registry to pull images and with Docker to handle deployments.
+
+Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components.
+All communications between internal services are done through a private network.
+
+
+To understand their interactions better, we can look at an example of a project deployment by a client.
+
+```mermaid
+sequenceDiagram
+    actor c as Client
+    participant api as API
+    participant db as Database
+    participant git as Git Controller
+    participant ssh as SSH Server
+    participant pom as Pomegranate
+    actor fs as File system
+    actor docker as Docker
+
+    note over c: Create a project
+    rect rgba(181, 107, 110, 0.7)
+        c ->>+ api: create project
+        api ->>+ db: create project
+        db ->>- api: OK
+        api ->>+ git: Send GRPC request
+        git -) fs: Create project
+        git ->>- api: OK
+        api ->>- c: OK
+    end
+
+    note over c: Add SSH key
+    rect rgba(139, 164, 193, 0.7)
+        c ->>+ api: Create SSH key
+        api ->>+ db: Create new SSH key
+        db ->>- api: OK
+        api ->>- c: OK
+    end
+
+    note over c: Push project to remote
+    rect rgba(167, 129, 171, 0.7)
+        c ->>+ ssh: Push project
+        ssh -) fs: Store project
+        ssh -) docker: Build & save image
+        ssh ->>- c: OK
+    end
+
+    note over c: Deploy a project
+    rect rgba(115, 184, 170, 0.7)
+        c ->>+ api: Deploy project
+        api ->>+ pom: Deploy project
+        pom -) docker: Deploy with built image
+        pom ->>- api: OK
+        api ->>- c: OK
+    end
+```
+
+As described previously, the API manages most of the user interactions and redirects them to the right service. The only time the Client interacts directly with other applications, is to push their project to the server.
 
 ### Database architecture
 
-***TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README***
+**_TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README_**
 
 ### Detailed specification
 
 #### Key constraints
 
-***TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety***
+**_TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety_**
 
 #### Client sign-up and login process
 
-***TODO: [CLIENT] mermaid diagram and description of the login process flow, for both the CLI and the web frontend***
+**_TODO: [CLIENT] mermaid diagram and description of the login process flow, for both the CLI and the web frontend_**
 
 #### Projects storage
 
