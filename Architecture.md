@@ -124,7 +124,8 @@ For this first iteration, we decided to split services to allow for a modular ar
 - The Git controller interacts with the host file system to create repositories, and with the local container registry to push images.
 - Pomegranate interacts with the local container registry to pull images and with Docker to handle deployments.
 
-Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components, as well as a more secure one, as the communication is done through a private network. While the HTTP requests allows us easier access to the API.
+Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components.
+All communications between internal services are done through a private network.
 
 
 To understand their interactions better, wa can look at an example of a project deployment of a Client.
