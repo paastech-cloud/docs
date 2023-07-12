@@ -59,7 +59,7 @@ flowchart LR
     L -->|env| N(EnvironmentTab)
     L -->|settings| O(SettingsTab)
 ```
-
+As was said earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The routes which allow users to access their profile and projects are obviously not available for anonymous visitors.
 #### CLI (Command-Line Interface)
 
 ***TODO: [CLIENT] fill for the cli***
