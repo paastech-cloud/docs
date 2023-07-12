@@ -48,11 +48,11 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 - NestJS-express can handle nearly twice as many requests concurrently, for the minimum amount doable (`14183 req/s` versus `8407 req/s`)
 - NestJS-express is on par with Express for the number of requests handled concurrently, for the average amount doable (`15640` versus `16454.41`)
 
-The API is currently running on NestJS-express v10.0.3, which just released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
+The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
 ##### Authentication strategies
 
-Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie as well as a Bearer token. The cookies keep the user safe from XSS (Cross-Site Scripting) attacks while the Bearer token allows users to log in via the CLI.
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token. The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
 
 ##### Mail
 
@@ -60,7 +60,7 @@ Since sending and receiving emails is an important part of user authentication a
 
 ##### GRPC
 
-To communicate with other services, especially Pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create nest clients, to communicate with the other services. Another great advantage of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services which made it easier to develop the services independently.
+To communicate with other services, especially Pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create nest clients in order to communicate with the other services. Another great advantage of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services which made it easier to develop the services independently.
 
 ##### SSH key
 
@@ -68,7 +68,7 @@ To be able to push their projects onto the Git server, each user needs to associ
 
 ##### Administrators
 
-In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete another user. At the moment it is neither possible to become an administrator through the website nor to appoint someone this role.
+In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete other users. At the moment it is neither possible to become an administrator nor to appoint someone to this role through the website or CLI.
 
 #### Git controller
 
