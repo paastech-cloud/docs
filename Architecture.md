@@ -60,7 +60,9 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database. For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent and structured data with relationships between different objects were more important factors.
+The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database.
+For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent and structured data with relationships between different objects were more important factors.
+Moreover, the need for transactions is materialized in the fact that we are in a modular architecture. Transactions are the only way to ensure secure and complete actions between the different components.
 
 The only flexible field is the environment variables that are stored for each Project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JSONB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this was easy to implement.
 
