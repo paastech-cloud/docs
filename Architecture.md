@@ -50,6 +50,7 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
+
 ##### Authentication strategies
 
 Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token. The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
@@ -68,7 +69,15 @@ To be able to push their projects onto the Git server, each user needs to associ
 
 ##### Administrators
 
-In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete other users. At the moment it is neither possible to become an administrator nor to appoint someone to this role through the website or CLI.
+In addition to the permissions of normal users, administrators have a few extra perks. 
+Administrators are able to 
+- view the non-critical information of each user (email, username)
+- delete a user
+- view all SSH keys
+
+Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
+To avoid polluating the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
+At the moment it is neither possible to become an administrator through the website nor to appoint someone this role.
 
 #### Git controller
 
