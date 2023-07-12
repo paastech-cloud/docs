@@ -99,6 +99,12 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a [Git](https://git-scm.com/) repository, which is created upon Project creation. The repository is then exposed to the Client, who can push their code to it.
 
+We chose a push-based approach, instead of a pull-based one, because it is more adapted to the use case of PaaSTech. Indeed, the Clients are the only ones who can push to the repositories, and they are the only ones who need to be notified of changes. This is not the case for pull-based approaches, where the server needs to be notified of changes, and needs to pull the code from the repository. They also do not get the response as easily as with a push-based approach.
+
+Besides, it forces the user to have a repository on a remote server, which is not the case for push-based approaches. And if they do, it might force them to adapt their current workstyle to the way our pull-based approach might work.
+
+From our point of view, it might also be tedious to manage the access to the user's repositories.
+
 We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using Git.
 
 ##### Creating and deleting repositories
