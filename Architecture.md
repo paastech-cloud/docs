@@ -16,11 +16,65 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 #### Web application
 
-**_TODO: [CLIENT] fill for web application frontend_**
+The website is made using [React](https://react.dev/). We decided to use this framework because it is the most popular, widely used in industry and greatly documented. Furthermore, the whole team was already familiar with React thanks to several past projects.
+
+As for the component library, we chose [Chakra UI](https://chakra-ui.com/). Even though we didn't have any experience with it, we decided to try it out since it was visually appealing and popular. It is also very well documented and supported by the community.
+
+[TypeScript](https://www.typescriptlang.org/) was a must-have for us to ensure code quality and to avoid bugs. Using a strongly typed codebase is also a good way to ensure the maintainability of our project in the future.
+
+The website sends requests to the client API with the use of Axios HTTP Client. Axios has several advantages as compared to the more well-known Fetch API. It [supports more browsers](https://github.com/axios/axios#browser-support), has built-in protection against CSRF (Cross-Site Request Forgery) and converts data to the JSON format automatically. 
+All of this makes Axios one of the most straightforward solutions to use.
+To simplify the development of the connection with the API, our team has used the [OpenAPI Generator](https://openapi-generator.tech/) tool which generated TypeScript objects and functions for every controller and endpoint in our API. The auto-generated code uses Axios to send requests, and is based on the OpenAPI specification of the API which was conveniently provided to us by NestJS once we added the `SwaggerModule`.
+
+**Website structure**
+
+The web application offers to users several public and protected routes, which give access to the main PaaSTech features. 
+
+An anonymous user can view:
+
+- The home page
+- The login and sign-up pages
+- The email verification and password reset pages
+
+On top of that, an authenticated user has access to their personal dashboard, which includes:
+
+- their profile
+- their projects
+- their projects' information
+- actions and logs for a given project
+- environment variables
+- project settings (which just allow to delete a project for now)
+
+See the schema of the app routes below to better understand how the web interface is structured:
+
+```mermaid
+flowchart LR
+    A{App} --> B[Public]
+    A --> C[Protected]
+    B -->|'root' /| D(HomePage)
+    C -->|/dashboard/| E(DashboardHomePage)
+    D -->|login| F(LoginPage)
+    D -->|register| G(RegisterPage)
+    D -->|email-verification/:token| H(EmailVerificationPage)
+    D -->|password-recovery| I(PasswordRecoveryPage)
+    D -->|password-reset/:token| J(PasswordResetPage)
+    E -->|profile| K(ProfilePage)
+    E -->|:projectId| L(DashboardDetails)
+    L -->|logs| M(LogsTab)
+    L -->|env| N(EnvironmentTab)
+    L -->|settings| O(SettingsTab)
+```
+As mentioned earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The `:token` parameter used both for email verification and password reset is a UUID value which a user receives by email. This URL parameter is mandatory as it is used by the API to find a corresponding user in the database and either validate their account or authorize a password reset (cf. [Database Architecture](#database-architecture)).
+
+The routes which allow users to access their profile and projects are not available for anonymous visitors. When accessing the `/dashboard` route, a user can view a list of all their existing projects. Clicking on one of the list items will open a page with more details about a particular project. The `:projectId` parameter in the page URL is thus the UUID of a project in the database, it is sent to the API to fetch additional data about the project.
 
 #### CLI (Command-Line Interface)
 
-**_TODO: [CLIENT] fill for the cli_**
+The CLI tool, or Command Line Interface tool, is the main way for a User to create and deploy Projects. It has been developed in [Go](https://go.dev/) for its ease of use, its cross-platform compatibility and its overall great performances. Moreover, the Go language is well suited for CLI development, as it is a compiled language. It is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
+
+In order to make this tool, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with namely subcommands and flags. It is notably used by the Kubernetes CLI tool, `kubectl`, or even by companies like [Fly.io](https://fly.io/) and [Scaleway](https://www.scaleway.com/) for their own CLI tools.
+
+Apart from Cobra, other libraries are used in this tool, such as [`go-git`](https://github.com/go-git/go-git), which allows for easy Git repository management. This is required for the tool to be able to initialize projects by adding a remote Git repository, and to deploy projects by pushing the code to our git server.
 
 #### Client API
 
@@ -88,9 +142,15 @@ It is used because it discovers when containers are started/stopped and can dyna
 
 #### Database
 
-The chosen database for this application is [PostgreSQL](https://www.postgresql.org/). As a market leader, PostgreSQL stands out for its performance and widespread use throughout the world.
+The requirement for an ACID (Atomicity, Consistency, Isolation, and Durability) database led us to choose a relational database.
+For our application there wasn't a need to have a multitude of adaptable fields and the benefits of having consistent and structured data with relationships between different objects were more important factors.
+Moreover, the need for transactions is materialized in the fact that we are in a modular architecture. Transactions are the only way to ensure secure and complete actions between the different components.
 
-The API connects to the database using an ORM called [Prisma](https://www.prisma.io/).
+The only flexible field is the environment variables that are stored for each Project, but since our chosen database, [PostgreSQL](https://www.postgresql.org/), supports the [JSONB](https://www.postgresql.org/docs/9.5/datatype-json.html) type, this was easy to implement.
+
+As a market leader, PostgreSQL stands out for its performance and widespread use throughout the world. Not only is it free and open-source, it also offers a larger set of extensions and features than other databases, like the support for more than 43 different [data types](https://www.postgresql.org/docs/current/datatype.html). All of this together with its flexibility, the usage of [Multi-Version concurrency Control (MVCC)](https://www.postgresql.org/docs/current/glossary.html#GLOSSARY-CONCURRENCY) and our prior experiences made it a more interesting option that its major competitor [MySQL](https://www.mysql.com/).
+
+The API connects to the database using an ORM called [Prisma](https://www.prisma.io/). Prisma also automates the generation and migration of the database schema as well as creating the classes associated to each table. Being an ORM that is both performant and allows the reorganisation of SQL data into simple classes, it was an important addition to our technology stack. Its complete documentation, active development and strong support made it more interesting than its competitors like [TypeORM](https://typeorm.io/) or [Objection JS](https://vincit.github.io/objection.js/).
 
 #### CI/CD
 
@@ -107,11 +167,169 @@ The API connects to the database using an ORM called [Prisma](https://www.prisma
 
 ### Component interaction
 
-**_TODO: [UNIFIED WORK] mermaid diagram of how components interact with eachother_**
+```mermaid
+flowchart LR
+    cli["CLI"]
+
+    web <-- HTTP --> api
+    cli <-- HTTP --> api
+    cli <-- Git over SSH --> ssh
+
+
+    subgraph Github Pages
+        web["Web Frontend"]
+    end
+
+    subgraph PaaSTech internal services
+        api["API"]
+        git["Git controller"]
+        ssh["OpenSSH server"]
+        pom["Pomegranate"]
+        db[(PostgreSQL)]
+        fs[("`Host filesystem`")]
+        docker(["Docker"])
+        cr(["`Local container registry`"])
+
+        api -. gRPC .-> git
+        api -. gRPC .-> pom
+        api -. SQL .-> db
+
+        git -. manages repositories .-> fs
+        ssh -. git receive-pack .-> fs
+        ssh -. push images .-> cr
+
+        pom -. manages deployments .-> docker
+
+        docker -. use images .-> cr
+
+        cr === fs
+    end
+```
+
+In this schema, we can see the different components interacting with each other.
+
+For this first iteration, we decided to split services to allow for a modular architecture. Doing so allows us to easily replace a component if needed, and to scale each component independently.
+
+- The client API is the main component that is used by the clients to interact with the service. This API communicates with the Git controller for repositories management, with Pomegranate to create Docker deployments and with the database to store the data.
+- The Git controller interacts with the host file system to create repositories, and with the local container registry to push images.
+- Pomegranate interacts with the local container registry to pull images and with Docker to handle deployments.
+
+Most of the interactions between the different components are done through gRPC, except for the web frontend and the CLI, which use HTTP requests. Using gRPC allows for a more efficient communication between the components.
+All communications between internal services are done through a private network.
+
+
+To understand their interactions better, we can look at an example of a project deployment by a client.
+
+```mermaid
+sequenceDiagram
+    actor c as Client
+    participant api as API
+    participant db as Database
+    participant git as Git Controller
+    participant ssh as SSH Server
+    participant pom as Pomegranate
+    actor fs as File system
+    actor docker as Docker
+
+    note over c: Create a project
+    rect rgba(181, 107, 110, 0.7)
+        c ->>+ api: create project
+        api ->>+ db: create project
+        db ->>- api: OK
+        api ->>+ git: Send GRPC request
+        git -) fs: Create project
+        git ->>- api: OK
+        api ->>- c: OK
+    end
+
+    note over c: Add SSH key
+    rect rgba(139, 164, 193, 0.7)
+        c ->>+ api: Create SSH key
+        api ->>+ db: Create new SSH key
+        db ->>- api: OK
+        api ->>- c: OK
+    end
+
+    note over c: Push project to remote
+    rect rgba(167, 129, 171, 0.7)
+        c ->>+ ssh: Push project
+        ssh -) fs: Store project
+        ssh -) docker: Build & save image
+        ssh ->>- c: OK
+    end
+
+    note over c: Deploy a project
+    rect rgba(115, 184, 170, 0.7)
+        c ->>+ api: Deploy project
+        api ->>+ pom: Deploy project
+        pom -) docker: Deploy with built image
+        pom ->>- api: OK
+        api ->>- c: OK
+    end
+```
+
+As described previously, the API manages most of the user interactions and redirects them to the right service. The only time the Client interacts directly with other applications, is to push their project to the server.
 
 ### Database architecture
 
-***TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README***
+As the database is unified and serves as a focal point of the application, everything is contained in the same logical database.
+The architecture is as follows:
+
+```mermaid
+erDiagram
+    USERS {
+        uuid id PK
+        varchar(40) username UK
+        varchar(100) email UK
+        varchar(255) password
+        bool is_admin "Default false"
+        uuid email_nonce UK "Nullable, default uuid()"
+        uuid password_nonce UK "Nullable"
+        timestamp created_at
+        timestamp updated_at "Nullable"
+    }
+    SSH_KEYS {
+        uuid id PK
+        text value "public SSH key content"
+        varchar(30) name
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+    PROJECTS {
+        uuid id PK
+        varchar(40) name
+        jsonb config
+        timestamp created_at
+        timestamp updated_at "Nullable"
+        uuid user_id FK
+    }
+
+    USERS ||--o{ PROJECTS : manage
+    USERS ||--o{ SSH_KEYS : possess
+```
+
+As you may notice, every table has a UUID field as a primary key. Compared to [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. 
+To generate a [UUID](https://www.postgresql.org/docs/current/datatype-uuid.html), we are using the UUIDv4 standard, which generates each UUID randomly. Thus, there are roughly 103 trillion UUIDv4s, lowering the chance of finding a duplicate UUID to one-in-a-billion. 
+In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column, effectively blocking the insertion of any new rows.
+Even though serials take up less space (4 bytes) than a UUID (16 bytes) , incrementing integers offers information about the order of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and impossible to guess, completely removing this attack pattern.
+
+
+Furthermore, since deployment URLs are built from the project id (`{projectId}.user-app.paastech.cloud`) , hiding the internal workings of the database was a requirement. 
+
+
+The table `users` contains all the necessary information about each Client. Upon User creation, an `email_nonce` is automatically created. A User is only considered active once the email has been confirmed, signified by the field `email_nonce` being set to null.
+A nonce is a random value that is unique and serves for identification. 
+Should the User wish to reset their password, a new UUID will be saved in the field `password_nonce`. The Client will need to provide said nonce together with the new password to finish the procedure.
+In the case of multiple reset requests, the field `password_nonce` gets overwritten each time. This ensures only the last request stays valid.
+Once the password has been reset, `password_nonce` will be set to null.
+
+The `ssh_keys` specified by each User allow them to push their repository onto our git server. Each SSH key can have a name to make it easier to distinguish multiple keys, however, it is not required.
+An SSH key belongs to a Client and not a Project. Thus, the Client can access all of their repositories via any of their keys.
+
+
+The `projects` table describes a Project. Its `config` field contains all the environment variables of said Project, like a database URL. 
+Since the configuration changes for every Project, we decided to store it as a flexible JSON field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performance than a simple JSON field.
 
 #### Key constraints
 
@@ -201,10 +419,44 @@ Each time a Client connects to a protected endpoint, the API guards automaticall
 
 In order to ease the communication with the other services, the API needed to return a uniform response. By using [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data before it was sent to the Client. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
 
+#### CLI and login process
+
+In order to log in from the CLI tool, the Client must have first created an account on the web frontend since the CLI tool does not allow for account creation.
+This is intentional, and it ensures that creating an account cannot be automated. Using a website can also allow for more verifications, like [CAPTCHAs](https://en.wikipedia.org/wiki/CAPTCHA).
+
+The login process begins with the user typing the `paastech login` command which would prompt them to enter their email address and password. The CLI tool then sends a request to the API to get a JWT token.
+This token is stored locally in the user's config directory and is used for all subsequent commands requiring to be authenticated.
+The token is valid for 6 hours, after which the user must re-authenticate against the API by typing the command again.
+
+The token is stored in a configuration file following the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+This means the file is located under the `$HOME/.config/` directory on all systems supporting the [freedesktop.org](https://www.freedesktop.org/wiki/) recommendations (most likely GNU/Linux distributions).
+
+This process is illustrated in the following sequence diagram:
+
+```mermaid
+sequenceDiagram
+    actor u as User
+    participant cli as CLI
+    participant api as API
+    participant db as PostgreSQL
+
+    u ->>+ cli: paastech login
+    cli ->>+ api: HTTP POST /auth/login
+    api ->>+ db: SQL query
+    db -->>- api: results
+    api -->>- cli: JWT token
+    cli ->>- u: Logged in successfully
+```
 
 #### Projects storage
 
 As all PaaS providers, PaaSTech needs to store the code of the projects created by its Clients. This is done using a [Git](https://git-scm.com/) repository, which is created upon Project creation. The repository is then exposed to the Client, who can push their code to it.
+
+We chose a push-based approach, instead of a pull-based one, because it is more adapted to the use case of PaaSTech. Indeed, the Clients are the only ones who can push to the repositories, and they are the only ones who need to be notified of changes. This is not the case for pull-based approaches, where the server needs to be notified of changes, and needs to pull the code from the repository. They also do not get the response as easily as with a push-based approach.
+
+Besides, it forces the user to have a repository on a remote server, which is not the case for push-based approaches. And if they do, it might force them to adapt their current workstyle to the way our pull-based approach might work.
+
+From our point of view, it might also be tedious to manage the access to the user's repositories.
 
 We chose to use Git to store the code of the projects, because it is the most used version control system, and is the most adapted to store code. Using it makes the integration seamless for users who are probably already using Git.
 
