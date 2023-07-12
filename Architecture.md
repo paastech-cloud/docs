@@ -132,37 +132,49 @@ To understand their interactions better, we can look at an example of a project 
 
 ```mermaid
 sequenceDiagram
-    note over Client: Create a project
+    actor c as Client
+    participant api as API
+    participant db as Database
+    participant git as Git Controller
+    participant ssh as SSH Server
+    participant pom as Pomegranate
+    actor fs as File system
+    actor docker as Docker
+
+    note over c: Create a project
     rect rgba(181, 107, 110, 0.7)
-    Client->>+API: create project
-    API->>+Database: create project
-    Database->>+API: OK
-    API->>+Git Controller: Send GRPC request
-    Git Controller->>+File system: Create project
-    Git Controller->>+API: OK
-    API->>+Client: OK
+        c ->>+ api: create project
+        api ->>+ db: create project
+        db ->>- api: OK
+        api ->>+ git: Send GRPC request
+        git -) fs: Create project
+        git ->>- api: OK
+        api ->>- c: OK
     end
-    note over Client: Add SSH key
+
+    note over c: Add SSH key
     rect rgba(139, 164, 193, 0.7)
-    Client->>+API: Create SSH key
-    API->>+Database: Create new SSH key
-    Database->>+API: OK
-    API->>+Client: OK
+        c ->>+ api: Create SSH key
+        api ->>+ db: Create new SSH key
+        db ->>- api: OK
+        api ->>- c: OK
     end
-    note over Client: Push project to remote
+
+    note over c: Push project to remote
     rect rgba(167, 129, 171, 0.7)
-    Client->>+SSH Server: Push project
-    SSH Server->>+File system: Store project
-    SSH Server->>+Docker: Build & save image
-    SSH Server->>+ Client: OK
+        c ->>+ ssh: Push project
+        ssh -) fs: Store project
+        ssh -) docker: Build & save image
+        ssh ->>- c: OK
     end
-    note over Client: Deploy a project
+
+    note over c: Deploy a project
     rect rgba(115, 184, 170, 0.7)
-    Client->>+API: Deploy project
-    API->>+Pomegranate: Deploy project
-    Pomegranate->>+Docker: Deploy with built image
-    Pomegranate->>+API: OK
-    API->>+Client: OK
+        c ->>+ api: Deploy project
+        api ->>+ pom: Deploy project
+        pom -) docker: Deploy with built image
+        pom ->>- api: OK
+        api ->>- c: OK
     end
 ```
 
