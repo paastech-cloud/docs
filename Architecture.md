@@ -120,6 +120,8 @@ sequenceDiagram
     API->>+Client: OK
 ```
 
+As described previously, the API manages most of the user interactions and redirects them to the right service. The only time the Client interacts directly with other applications, is to push their project to the server.
+
 ### Database architecture
 
 **_TODO: [CLIENT] describe the database architecture, as referenced in the MCD in the README_**
