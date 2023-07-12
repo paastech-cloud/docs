@@ -151,7 +151,7 @@ The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used
 
 ##### Mail
 
-Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time.
+Since sending and receiving emails is an important part of the user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email server every time.
 After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
 Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
 
