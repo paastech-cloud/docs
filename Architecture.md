@@ -27,7 +27,7 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 The Client API is one of the fundamental parts of our project. It not only handles every Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is sent and verified by the API before being carried out.
 
-With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [TypeScript](https://www.typescriptlang.org/) with [NestJS](https://nestjs.com/).
+With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [NestJS](https://nestjs.com/) with [TypeScript](https://www.typescriptlang.org/).
 Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
 out from the competition by proposing two things:
 1. A [list of support modules](https://www.npmjs.com/search?q=%40nestjs), which totals to 41 as of today;
@@ -77,8 +77,8 @@ In addition to the permissions of normal users, administrators have a few extra 
 Administrators are able to 
 - view the non-critical information of each user (email, username)
 - delete a user
-- view all SSH keys
-- view all existing projects
+- view every SSH keys
+- view every existing projects
 
 Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
 To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
@@ -86,7 +86,7 @@ At the moment, it is neither possible to become an administrator through the web
 
 ##### User Input Validation
 
-One of the most important parts of an API is, to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors occurring. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
+One of the most important parts of an API is to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
 This way, the type and other necessary rules are automatically checked before even executing the code of the application and should the verification fail, the API will return a `BAD REQUEST` error.
 
 ##### Route protection
@@ -97,7 +97,7 @@ To protect each route from attacks, we secured each endpoint with [guards](https
 - Private - only accessible to connected Clients
 - Admin Only - only accessible to administrators
 
-Each time a Client connects to the API to a protected endpoint, the guards automatically check if they have the necessary authorization before taking the actual request. 
+Each time a Client connects to a protected endpoint, the API guards automatically check if they have the necessary authorization before taking the actual request. 
 
 ##### Uniformity of response
 
@@ -175,7 +175,7 @@ The API connects to the database using an ORM called [Prisma](https://www.prisma
 
 ##### Client states
 
-When signing up, the client should provide an email address, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after some time of an account being active without a verified email, although this is not implemented for now.
+When signing up, the client should provide an email address, a username and a password. They can then log into the software as soon as they verify their email. If needed, they can request a password reset using the "forgotten password" process. The account should be either deleted or locked/deactivated after it was active without a verified email for some time, although this is not implemented right now.
 
 ```mermaid
 stateDiagram-v2
