@@ -25,7 +25,7 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 #### Client API
 
 
-The Client API is one of the fundamental parts of our project. It not only handles every Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is sent and verified by the API before being carried out.
+The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is sent and verified by the API before being carried out.
 
 With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [NestJS](https://nestjs.com/) with [TypeScript](https://www.typescriptlang.org/).
 Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
