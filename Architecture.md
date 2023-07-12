@@ -50,62 +50,6 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
-##### Authentication strategies
-
-Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token.
-The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
-
-##### Mail
-
-Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time.
-After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
-Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
-
-##### GRPC
-
-To communicate with other services, especially Pomegranate and the git-repo-manager, we used [gRPC](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create NestJS gRPC clients in order to communicate with the other services. Another great advantage of gRPC is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the `.proto` files allowed us to define contracts between the services which made it easier to develop the services independently.
-
-##### SSH key
-
-To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account.
-Using the command line, they will then be able to push their repositories' code to the server.
-
-The API is responsible for the handling, storage and processing of the SSH keys. It acts as a "serving hatch" to store the keys in the database.
-The git ssh server will then query the database directly to use compare the SSH keys sent by the Client to the ones in the database.
-
-##### Administrators
-
-In addition to the permissions of normal users, administrators have a few extra perks. 
-Administrators are able to 
-- view the non-critical information of each user (email, username)
-- delete a user
-- view all SSH keys
-- view all existing projects
-
-Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
-To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
-At the moment, it is neither possible to become an administrator through the website, nor to appoint someone to this role.
-
-##### User Input Validation
-
-One of the most important parts of an API is to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
-This way, the type and other necessary rules are automatically checked before even executing the code of the application and should the verification fail, the API will return a `BAD REQUEST` error.
-
-##### Route protection
-
-To protect each route from attacks, we secured each endpoint with [guards](https://docs.nestjs.com/guards). These classes define the rules to access different endpoints. To allow for the best user experience while keeping our application protected, three types of routes have been established:
-
-- Public - accessible to everyone
-- Private - only accessible to connected Clients
-- Admin Only - only accessible to administrators
-
-Each time a Client connects to a protected endpoint, the API guards automatically check if they have the necessary authorization before taking the actual request. 
-
-##### Uniformity of response
-
-In order to ease the communication with the other services, the API needed to return a uniform response. By using [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data before it was sent to the Client. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
-
-
 #### Git controller
 
 **_TODO: [GIT] fill for the git controller and architecture_**
@@ -173,7 +117,7 @@ The API connects to the database using an ORM called [Prisma](https://www.prisma
 
 **_TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety_**
 
-#### Client sign-up and login process
+#### Client API
 
 ##### Client states
 
@@ -200,7 +144,61 @@ stateDiagram-v2
 
 ```
 
-##### Flow processes
+##### Authentication strategies
+
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token.
+The cookies keep users safe from XSS (Cross-Site Scripting) attacks and are used for authentication by the PaaSTech web interface, while the Bearer token allows users to log in via the CLI.
+
+##### Mail
+
+Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time.
+After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
+Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
+
+##### GRPC
+
+To communicate with other services, especially Pomegranate and the git-repo-manager, we used [gRPC](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create NestJS gRPC clients in order to communicate with the other services. Another great advantage of gRPC is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the `.proto` files allowed us to define contracts between the services which made it easier to develop the services independently.
+
+##### SSH key
+
+To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account.
+Using the command line, they will then be able to push their repositories' code to the server.
+
+The API is responsible for the handling, storage and processing of the SSH keys. It acts as a "serving hatch" to store the keys in the database.
+The git ssh server will then query the database directly to use compare the SSH keys sent by the Client to the ones in the database.
+
+##### Administrators
+
+In addition to the permissions of normal users, administrators have a few extra perks. 
+Administrators are able to 
+- view the non-critical information of each user (email, username)
+- delete a user
+- view all SSH keys
+- view all existing projects
+
+Since the SSH keys stored on our server are only the public part and therefore don't pose a security risk, there is no need to hide such information from administrators.
+To avoid polluting the output if the administrator only wants to see their own SSH keys, we decided to separate both requests.
+At the moment, it is neither possible to become an administrator through the website, nor to appoint someone to this role.
+
+##### User Input Validation
+
+One of the most important parts of an API is to check the Client input values. Every piece of data provided by the User should follow the asked type and rules to assure the best performance and security and minimize the risk of errors. To avoid checking each input individually, the verification is made using [Decorators](https://docs.nestjs.com/microservices/basics#decorators) and [Validators](https://docs.nestjs.com/pipes#class-validator) provided by NestJS. 
+This way, the type and other necessary rules are automatically checked before even executing the code of the application and should the verification fail, the API will return a `BAD REQUEST` error.
+
+##### Route protection
+
+To protect each route from attacks, we secured each endpoint with [guards](https://docs.nestjs.com/guards). These classes define the rules to access different endpoints. To allow for the best user experience while keeping our application protected, three types of routes have been established:
+
+- Public - accessible to everyone
+- Private - only accessible to connected Clients
+- Admin Only - only accessible to administrators
+
+Each time a Client connects to a protected endpoint, the API guards automatically check if they have the necessary authorization before taking the actual request. 
+
+##### Uniformity of response
+
+In order to ease the communication with the other services, the API needed to return a uniform response. By using [Interceptors](https://docs.nestjs.com/interceptors), we were able to filter all outgoing data before it was sent to the Client. Every endpoint will return a json object containing a status as well as a message that contains the actual data to return.
+
 
 #### Projects storage
 
