@@ -168,7 +168,7 @@ Each repository has a GitHub Actions CI to execute format check, linter and test
 Most projects use our own Actions available in a [central repository](https://github.com/paastech-cloud/.github). 
 This ensures that all projects have the same CI/CD pipeline and that the CI/CD pipeline is easily maintainable.
 Moreover, thanks to Rust easy documentation creation process, a simple CI job is able to build the documentation and deploy it on [GitHub Pages](https://pages.github.com/) for every Rust project.
-Furthermore, at a tag push on main, or on a workflow call, a Docker image is built for every project that has this workflow set up.
+Furthermore, at every tag push on main, or on a workflow call, a Docker image is built for every project that has this workflow set up.
 This image is then pushed as a repository package to the [GitHub Container Registry](https://ghrc.io) and is available for use.
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
@@ -181,7 +181,7 @@ Furthermore, even if the setup script does a bit of configuration, some folder a
 This deployment method is available in [PaaSTech' `infra` repository](https://github.com/paastech-cloud/infra).
 In this `docker-compose.yml`, we create 2 networks, one for the internal applications, and one for the client applications.
 Each application is then deployed in a container, with environment variables that can be set up by the user in the `.env` file, and volumes as needed.
-This file also ensure that:
+This file also ensures that:
 - the API is actually available at [https://api.paastech.cloud](https://api.paastech.cloud)
 - the git controller is available on the selected port
 - all containers are started in order
@@ -195,7 +195,7 @@ This file also ensure that:
 - The Service refers to PaaSTech as a whole;
 - A Client is a user account created by an end user against the Service;
 - A Project is a materialisation of a Git repository, created by a Client using either the web frontend or the CLI. A Project can be deployed by the Client by pushing its code to the Service.
-- An Application (also referred to as Deployment) is an atomic unit of code, and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
+- An Application (also referred to as Deployment) is an atomic unit of code and is the result of a Project deployment. This unit is internally managed and can only be configured to a certain extent by the Client.
 
 ### Component interaction
 
