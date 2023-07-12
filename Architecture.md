@@ -48,10 +48,12 @@ Each repository has a GitHub Actions CI to execute format check, linter and test
 Most projects use our own Actions available in a [central repository](https://github.com/paastech-cloud/.github). 
 This ensures that all projects have the same CI/CD pipeline and that the CI/CD pipeline is easily maintainable.
 Moreover, thanks to Rust easy documentation creation process, a simple CI job is able to build the documentation and deploy it on [GitHub Pages](https://pages.github.com/) for every Rust project.
-Furthermore, at a tag push on main, or on a workflow call, a Docker image is build for any project. 
+Furthermore, at a tag push on main, or on a workflow call, a Docker image is built for every project that has this workflow set up.
 This image is then pushed as a repository package to the [GitHub Container Registry](https://ghrc.io) and is available for use.
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
+
+#### Deployment
 
 To deploy every application of PaaSTech on a single machine, a `docker-compose.yml` was made alongside a `setup.sh` script to set up the host machine easily and deploy the entire project.
 As of today, PaaSTech is not scalable and is not meant to be deployed on multiple machines. 
@@ -59,7 +61,12 @@ Furthermore, even if the setup script does a bit of configuration, some folder a
 This deployment method is available in [PaaSTech' `infra` repository](https://github.com/paastech-cloud/infra).
 In this `docker-compose.yml`, we create 2 networks, one for the internal applications, and one for the client applications.
 Each application is then deployed in a container, with environment variables that can be set up by the user in the `.env` file, and volumes as needed.
-This file also ensure that the API is actually available at [https://api.paastech.cloud](https://api.paastech.cloud), that the git controller is available on the selected port, that every container are started in order, can communicate and that Traefik is set up correctly.
+This file also ensure that:
+- the API is actually available at [https://api.paastech.cloud](https://api.paastech.cloud)
+- the git controller is available on the selected port
+- all containers are started in order
+- all containers can communicate with eachother
+- Traefik is set up correctly.
 
 ## Architecture
 
