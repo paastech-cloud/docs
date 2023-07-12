@@ -19,8 +19,6 @@ Below are the technologies used for the different components of the application.
 
 A list of TPMs (Third-Party Modules) might be written to give more insight about the component, but please keep in mind those lists are non-exhaustive and only the main TPMs are described.
 
-**_TODO: [UNIFIED WORK] define the different technologies below, why they were chosen, and use arguments AND PROOFS to show research_**
-
 #### Web application
 
 The website is made using [React](https://react.dev/). We decided to use this framework because it is the most popular, widely used in industry and greatly documented. Furthermore, the whole team was already familiar with React thanks to several past projects.
@@ -360,10 +358,6 @@ An SSH key belongs to a Client and not a Project. Thus, the Client can access al
 
 The `projects` table describes a Project. Its `config` field contains all the environment variables of said Project, like a database URL. 
 Since the configuration changes for every Project, we decided to store it as a flexible JSON field. We decided to use a JSONB field that stores the JSON data in binary form, allowing for better performance than a simple JSON field.
-
-#### Key constraints
-
-**_TODO: [CLIENT, INFRA] the key constraints that should never be broken by the application (or at least the external parts, like the API and container exposition) in order to maintain security, isolation and client data safety_**
 
 #### Client API
 
