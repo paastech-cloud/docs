@@ -39,7 +39,7 @@ Crates are third-party packages providing additional functionalities and are man
 
 Establishing communication with other services is done via [gRPC](https://grpc.io/docs/what-is-grpc/core-concepts/).
 gRPC imposed itself as the go-to framework for internal APIs thanks to its [high performance](https://www.nexthink.com/blog/comparing-grpc-performance) compared to [HTTP performance](https://github.com/programatik29/rust-web-benchmarks/blob/master/result/hello-world.md#comparisons).
-The synthetic benchmarks show:
+Synthetic benchmarks shows that:
  - gRPC performs ~25% more requests compared to HTTP on a single core
  - gRPC scales better horizontally
 
