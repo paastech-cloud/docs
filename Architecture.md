@@ -16,11 +16,11 @@
 
 #### CLI (Command-Line Interface)
 
-The CLI tool, which is the principal way for a user to create and deploy projects, has been developed in [Go](https://go.dev/). It was chosen for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language, which allows for a single binary to be distributed, and it is used in many other CLI tools, such as Docker, Kubernetes, Terraform, etc.
+The CLI tool, or Command Line Interface, which is the main way for a User to create and deploy Projects, has been developed in [Go](https://go.dev/). It was chosen for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language, which allows for a single binary to be distributed, and it is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
 
-In order to make this tool in Go, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with subcommands, flags, etc. It is notably used by the Kubernetes CLI tool, `kubectl` or even by companies like Fly.io and Scaleway for their own CLI tools.
+In order to make this tool in Go, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with namely subcommands and flags. It is notably used by the Kubernetes CLI tool, `kubectl`, or even by companies like [Fly.io](https://fly.io/) and [Scaleway](https://www.scaleway.com/) for their own CLI tools.
 
-Apart from Cobra, other libraries are used in this tool, such as go-git, which allows for easy Git repository management. This is required for the tool to be able to initialize projects by adding a remote Git repository, and to deploy projects by pushing the code to our git server.
+Apart from Cobra, other libraries are used in this tool, such as [`go-git`](https://github.com/go-git/go-git), which allows for easy Git repository management. This is required for the tool to be able to initialize projects by adding a remote Git repository, and to deploy projects by pushing the code to our git server.
 
 #### Client API
 
@@ -73,25 +73,31 @@ Apart from Cobra, other libraries are used in this tool, such as go-git, which a
 
 ###### CLI
 
-In order to login from the CLI tool, the user must have first created an account on the web frontend since the CLI tool does not allow for account creation. 
+In order to log in from the CLI tool, the Client must have first created an account on the web frontend since the CLI tool does not allow for account creation.
+This is intentional, and it ensures that creating an account cannot be automated. Using a website can allow for more verifications, like [CAPTCHAs](https://en.wikipedia.org/wiki/CAPTCHA).
 
-The login process begins with the user typing the `paastech login` command which would prompt him to enter their email and password. The CLI tool then send a request to the API to get a JWT token. This token is stored locally in the user's config directory ($HOME/.config), and is used for all subsequent commands requiring to be authenticated. The token is valid for 6 hours, after which the user must login again.
+The login process begins with the user typing the `paastech login` command which would prompt them to enter their email address and password. The CLI tool then sends a request to the API to get a JWT token.
+This token is stored locally in the user's config directory and is used for all subsequent commands requiring to be authenticated.
+The token is valid for 6 hours, after which the user must re-authenticate against the API by typing the command again.
+
+The token is stored in a configuration file following the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+This means the file is located under the `$HOME/.config/` directory on all systems supporting the [freedesktop.org](https://www.freedesktop.org/wiki/) recommendations (most likely GNU/Linux distributions).
 
 This process is illustrated in the following sequence diagram:
 
 ```mermaid
 sequenceDiagram
-    actor User
-    participant CLI
-    participant API
-    participant DB as PostgreSQL
+    actor u as User
+    participant cli as CLI
+    participant api as API
+    participant db as PostgreSQL
 
-    User->>CLI: paastech login
-    CLI->>API: POST /auth/login
-    API->>DB: SELECT * FROM users WHERE ...
-    DB-->>API: {username: "...", etc.}
-    API-->>CLI: JWT token
-    CLI->>User: Logged in successfully
+    u ->>+ cli: paastech login
+    cli ->>+ api: HTTP POST /auth/login
+    api ->>+ db: SQL query
+    db -->>- api: results
+    api -->>- cli: JWT token
+    cli ->>- u: Logged in successfully
 ```
 
 #### Projects storage
