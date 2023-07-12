@@ -155,6 +155,8 @@ Since sending and receiving emails is an important part of user authentication a
 After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
 Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
 
+On the other hand, once PaaSTech is deployed and accessible to anyone, it was connected to an email server provided by our university.
+
 ##### GRPC
 
 To communicate with other services, especially Pomegranate and the git-repo-manager, we used [gRPC](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create NestJS gRPC clients in order to communicate with the other services. Another great advantage of gRPC is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the `.proto` files allowed us to define contracts between the services which made it easier to develop the services independently.
