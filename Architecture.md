@@ -130,7 +130,7 @@ To understand their interactions better, wa can look at an example of a project 
 ```mermaid
 sequenceDiagram
     note over Client: Create a project
-    rect rgb(191, 223, 255)
+    rect rgba(181, 107, 110, 0.7)
     Client->>+API: create project
     API->>+Database: create project
     Database->>+API: OK
@@ -140,21 +140,21 @@ sequenceDiagram
     API->>+Client: OK
     end
     note over Client: Add SSH key
-    rect rgb(200, 150, 255)
+    rect rgba(139, 164, 193, 0.7)
     Client->>+API: Create SSH key
     API->>+Database: Create new SSH key
     Database->>+API: OK
     API->>+Client: OK
     end
     note over Client: Push project to remote
-    rect rgb(230, 160, 200)
-    Client->>+GitServer: Push project
-    GitServer->>+File system: Store project
-    GitServer->>+Docker: Build & save image
-    GitServer->>+ Client: OK
+    rect rgba(167, 129, 171, 0.7)
+    Client->>+SSH Server: Push project
+    SSH Server->>+File system: Store project
+    SSH Server->>+Docker: Build & save image
+    SSH Server->>+ Client: OK
     end
     note over Client: Deploy a project
-    rect rgb(120, 180, 160)
+    rect rgba(115, 184, 170, 0.7)
     Client->>+API: Deploy project
     API->>+Pomegranate: Deploy project
     Pomegranate->>+Docker: Deploy with built image
