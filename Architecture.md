@@ -66,7 +66,7 @@ The routes which allow users to access their profile and projects are not availa
 
 #### CLI (Command-Line Interface)
 
-The CLI tool, or Command Line Interface tool, is the main way for a User to create and deploy Projects. IT has been developed in [Go](https://go.dev/) for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language. It is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
+The CLI tool, or Command Line Interface tool, is the main way for a User to create and deploy Projects. It has been developed in [Go](https://go.dev/) for its ease of use, its cross-platform compatibility and its overall great performances. Moreover, the Go language is well suited for CLI development, as it is a compiled language. It is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
 
 In order to make this tool, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with namely subcommands and flags. It is notably used by the Kubernetes CLI tool, `kubectl`, or even by companies like [Fly.io](https://fly.io/) and [Scaleway](https://www.scaleway.com/) for their own CLI tools.
 
