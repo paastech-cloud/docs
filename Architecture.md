@@ -25,7 +25,7 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 #### Client API
 
 
-The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that is writing any data in the shared database. It notifies Pomegranate each time a project needs to be deployed and lets a user add his SSH keys to be able to connect to the local Git server. Every user request is send and verified by the API before being carried out.
+The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is send and verified by the API before being carried out.
 
 With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [TypeScript](https://www.typescriptlang.org/) with [NestJS](https://nestjs.com/).
 Being a cutting-edge framework gaining more and more attention, NestJS is very versatile and stands
@@ -52,22 +52,23 @@ The API is currently running on NestJS-express v10.0.3, which just released. Two
 
 ##### Authentication strategies
 
-Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns a both an JWT HttpOnly cookie as well as a Bearer token. The cookies keep the user safe from XSS (Cross-Site Scripting) while the Bearer token allows users to log in via the CLI.
+Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie as well as a Bearer token. The cookies keep the user safe from XSS (Cross-Site Scripting) attacks while the Bearer token allows users to log in via the CLI.
 
 ##### Mail
 
-With sending and receiving emails being an important part of this application for the user, we needed a local way to test these functions without actually needing to connect it to a private email every time. After some search we came across [mailhog](https://github.com/mailhog/MailHog). Mailhog allows anyone to create a temporary local smtp server and send and receive emails through it. Even though you are not able to send emails to real email adresses, you can send and receive local emails, which allowed us to test our code.
+Since sending and receiving emails is an important part of user authentication and the password reset process, we needed a way to test these functions locally without needing to connect the application to a private email every time. After some search we came across [mailhog](https://github.com/mailhog/MailHog). Mailhog allows anyone to create a temporary local smtp server and send and receive emails through it. Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
 
 ##### GRPC
 
-To communicate with the other services, especially pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its fast performance and low latency. It also allows us to easily create nest clients for the other services, which we can use to communicate with them. Another great advantages of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services, which made it easier to develop the services independently.
+To communicate with other services, especially Pomegranate and the git-repo-manager, we used [grpc](https://grpc.io/), due to its high performance and low latency. It also allows us to easily create nest clients, to communicate with the other services. Another great advantage of grpc is that it is language agnostic, which means that we can use it to communicate with services written in other languages. Creating the proto files allowed us to define contracts between the services which made it easier to develop the services independently.
 
 ##### SSH key
 
 To be able to push their projects onto the Git server, each user needs to associate at least one ssh key with their account. Using the command line, they will then be able to push their repositories to the server.
 
 ##### Administrators
-In addition to the permissions of a normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username)- and even delete a Client.
+
+In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete a Client.
 At the moment, it is not possible to get an administrator, as they don't have the right to modify other Client's information.
 
 #### Git controller
