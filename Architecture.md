@@ -12,7 +12,57 @@
 
 #### Web application
 
-**_TODO: [CLIENT] fill for web application frontend_**
+The website is made using [React](https://react.dev/). We decided to use this framework because it is the most popular, widely used in industry and greatly documented. Furthermore, the whole team was already familiar with React thanks to several past projects.
+
+As for the component library, we chose [Chakra UI](https://chakra-ui.com/). Even though we didn't have any experience with it, we decided to try it out since it was visually appealing and popular. It is also very well documented and supported by the community.
+
+[TypeScript](https://www.typescriptlang.org/) was a must-have for us to ensure code quality and to avoid bugs. Using a strongly typed codebase is also a good way to ensure the maintainability of our project in the future.
+
+The website sends requests to the client API with the use of Axios HTTP Client. Axios has several advantages as compared to the more well-known Fetch API. It [supports more browsers](https://github.com/axios/axios#browser-support), has built-in protection against CSRF (Cross-Site Request Forgery) and converts data to the JSON format automatically. 
+All of this makes Axios one of the most straightforward solutions to use.
+To simplify the development of the connection with the API, our team has used the [OpenAPI Generator](https://openapi-generator.tech/) tool which generated TypeScript objects and functions for every controller and endpoint in our API. The auto-generated code uses Axios to send requests, and is based on the OpenAPI specification of the API which was conveniently provided to us by NestJS once we added the `SwaggerModule`.
+
+**Website structure**
+
+The web application offers to users several public and protected routes, which give access to the main PaaSTech features. 
+
+An anonymous user can view:
+
+- The home page
+- The login and sign-up pages
+- The email verification and password reset pages
+
+On top of that, an authenticated user has access to their personal dashboard, which includes:
+
+- their profile
+- their projects
+- their projects' information
+- actions and logs for a given project
+- environment variables
+- project settings (which just allow to delete a project for now)
+
+See the schema of the app routes below to better understand how the web interface is structured:
+
+```mermaid
+flowchart LR
+    A{App} --> B[Public]
+    A --> C[Protected]
+    B -->|'root' /| D(HomePage)
+    C -->|/dashboard/| E(DashboardHomePage)
+    D -->|login| F(LoginPage)
+    D -->|register| G(RegisterPage)
+    D -->|email-verification/:token| H(EmailVerificationPage)
+    D -->|password-recovery| I(PasswordRecoveryPage)
+    D -->|password-reset/:token| J(PasswordResetPage)
+    E -->|profile| K(ProfilePage)
+    E -->|:projectId| L(DashboardDetails)
+    L -->|logs| M(LogsTab)
+    L -->|env| N(EnvironmentTab)
+    L -->|settings| O(SettingsTab)
+```
+As mentioned earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The `:token` parameter used both for email verification and password reset is a UUID value which a user receives by email. This URL parameter is mandatory as it is used by the API to find a corresponding user in the database and either validate their account or authorize a password reset (cf. [Database Architecture](#database-architecture)).
+
+The routes which allow users to access their profile and projects are not available for anonymous visitors. When accessing the `/dashboard` route, a user can view a list of all their existing projects. Clicking on one of the list items will open a page with more details about a particular project. The `:projectId` parameter in the page URL is thus the UUID of a project in the database, it is sent to the API to fetch additional data about the project.
 
 #### CLI (Command-Line Interface)
 
