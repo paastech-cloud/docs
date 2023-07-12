@@ -225,10 +225,10 @@ erDiagram
     USERS ||--o{ SSH_KEYS : possess
 ```
 
-As you can notice, every table has a UUID field as a primary key. Compared to [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. 
+As you may notice, every table has a UUID field as a primary key. Compared to [Serial](https://www.postgresql.org/docs/current/datatype-numeric.html) that is often used to identify a table, a UUID guarantees a better uniqueness across the whole database. 
 To generate a [UUID](https://www.postgresql.org/docs/current/datatype-uuid.html), we are using the UUIDv4 standard, which generates each UUID randomly. Thus, there are roughly 103 trillion UUIDv4s, lowering the chance of finding a duplicate UUID to one-in-a-billion. 
-In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column and become redundant. As the column is a primary key, this results in the table being full and creates an inability to insert new rows. 
-Even though serials take up less space (4 bytes) than a UUID (16 bytes), the column becomes a series of incrementing integers and offers information about the time of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and are impossible to guess, completely removing this attack pattern.
+In comparison, Serials are limited to roughly 2 billion (2147483647) and will eventually clog up the column, effectively blocking the insertion of any new rows.
+Even though serials take up less space (4 bytes) than a UUID (16 bytes) , incrementing integers offers information about the order of creation. This makes the table prone to timestamp-guessing. UUIDs are generated randomly and impossible to guess, completely removing this attack pattern.
 
 
 Furthermore, since deployment URLs are built from the project id (`{projectId}.user-app.paastech.cloud`) , hiding the internal workings of the database was a requirement. 
