@@ -153,6 +153,7 @@ sequenceDiagram
     Client->>GitServer: git-send-pack repository_name (git push)
     GitServer->>Database: Is the SSH key in the database?
     Database-->>GitServer: result
+    alt Authenticated
         GitServer->>Database: Is the SSH key linked to the repository ?
         Database-->>GitServer: result
         alt Authorized
