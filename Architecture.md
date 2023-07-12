@@ -155,7 +155,7 @@ Since sending and receiving emails is an important part of the user authenticati
 After some search we came across [MailHog](https://github.com/mailhog/MailHog). MailHog allows anyone to create a temporary local SMTP server to send and receive emails through.
 Even though you are not able to send emails to real email addresses, you can send and receive emails locally, which is very helpful for code testing.
 
-On the other hand, once PaaSTech is deployed and accessible to anyone, it was connected to an email server provided by our university.
+On the other hand, once PaaSTech is deployed and accessible to anyone, it was connected to an SMTP email server.
 
 ##### GRPC
 
