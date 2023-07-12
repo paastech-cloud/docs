@@ -217,7 +217,7 @@ flowchart LR
     subgraph PaaSTech internal services
         api["API"]
         git["Git controller"]
-        ssh["OpenSSH server"]
+        ssh["Go SSH server"]
         pom["Pomegranate"]
         db[(PostgreSQL)]
         fs[("`Host filesystem`")]
@@ -231,6 +231,7 @@ flowchart LR
         git -. manages repositories .-> fs
         ssh -. git receive-pack .-> fs
         ssh -. push images .-> cr
+        ssh -. SQL .-> db
 
         pom -. manages deployments .-> docker
 
