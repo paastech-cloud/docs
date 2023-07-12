@@ -68,8 +68,7 @@ To be able to push their projects onto the Git server, each user needs to associ
 
 ##### Administrators
 
-In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete a Client.
-At the moment, it is not possible to get an administrator, as they don't have the right to modify other Client's information.
+In addition to the permissions of normal users, administrators have a few extra perks. They are able to view the SSH keys of every Client as well as their personal non-critical information (email, username) and even delete another user. At the moment it is neither possible to become an administrator through the website nor to appoint someone this role.
 
 #### Git controller
 
