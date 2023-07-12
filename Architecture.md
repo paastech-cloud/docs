@@ -16,9 +16,9 @@
 
 #### CLI (Command-Line Interface)
 
-The CLI tool, or Command Line Interface, which is the main way for a User to create and deploy Projects, has been developed in [Go](https://go.dev/). It was chosen for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language, which allows for a single binary to be distributed, and it is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
+The CLI tool, or Command Line Interface tool, is the main way for a User to create and deploy Projects. IT has been developed in [Go](https://go.dev/) for its ease of use, its cross-platform compatibility and its performance. Moreover, the Go language is well suited for CLI development, as it is a compiled language. It is used in many other CLI tools, such as Docker, Kubernetes, Terraform, and more.
 
-In order to make this tool in Go, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with namely subcommands and flags. It is notably used by the Kubernetes CLI tool, `kubectl`, or even by companies like [Fly.io](https://fly.io/) and [Scaleway](https://www.scaleway.com/) for their own CLI tools.
+In order to make this tool, the [Cobra library](https://cobra.dev/) was used. It allows for easy creation of CLI tools, with namely subcommands and flags. It is notably used by the Kubernetes CLI tool, `kubectl`, or even by companies like [Fly.io](https://fly.io/) and [Scaleway](https://www.scaleway.com/) for their own CLI tools.
 
 Apart from Cobra, other libraries are used in this tool, such as [`go-git`](https://github.com/go-git/go-git), which allows for easy Git repository management. This is required for the tool to be able to initialize projects by adding a remote Git repository, and to deploy projects by pushing the code to our git server.
 
@@ -74,7 +74,7 @@ Apart from Cobra, other libraries are used in this tool, such as [`go-git`](http
 ###### CLI
 
 In order to log in from the CLI tool, the Client must have first created an account on the web frontend since the CLI tool does not allow for account creation.
-This is intentional, and it ensures that creating an account cannot be automated. Using a website can allow for more verifications, like [CAPTCHAs](https://en.wikipedia.org/wiki/CAPTCHA).
+This is intentional, and it ensures that creating an account cannot be automated. Using a website can also allow for more verifications, like [CAPTCHAs](https://en.wikipedia.org/wiki/CAPTCHA).
 
 The login process begins with the user typing the `paastech login` command which would prompt them to enter their email address and password. The CLI tool then sends a request to the API to get a JWT token.
 This token is stored locally in the user's config directory and is used for all subsequent commands requiring to be authenticated.
