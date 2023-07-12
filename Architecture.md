@@ -128,7 +128,7 @@ Most of the interactions between the different components are done through gRPC,
 All communications between internal services are done through a private network.
 
 
-To understand their interactions better, wa can look at an example of a project deployment of a Client.
+To understand their interactions better, we can look at an example of a project deployment by a client.
 
 ```mermaid
 sequenceDiagram
