@@ -53,6 +53,12 @@ This image is then pushed as a repository package to the [GitHub Container Regis
 
 On top of that, the web UI is automatically deployed on [Github Pages](https://pages.github.com/).
 
+To deploy every application of PaaSTech in a single machine, a `docker-compose.yml` was made alongside a `setup.sh` script to set up the host machine easily and deploy the entire project. 
+They are both available in [the `infra` repository](https://github.com/paastech-cloud/infra).
+In this `docker-compose.yml`, we create 2 networks, one for the internal applications, and one for the client applications.
+Each application is then deployed in a container, with environment variables that can be set up by the user in the `.env` file, and volumes as needed.
+This file also ensure that the API is actually available at [https://api.paastech.cloud](https://api.paastech.cloud), that the git controller is available on the selected port, that every container are started in order, can communicate and that Traefik is set up correctly.
+
 ## Architecture
 
 ### Definitions
