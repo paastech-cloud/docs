@@ -101,23 +101,38 @@ To understand their interactions better, wa can look at an example of a project 
 
 ```mermaid
 sequenceDiagram
+    note over Client: Create a project
+    rect rgb(191, 223, 255)
     Client->>+API: create project
     API->>+Database: create project
     Database->>+API: OK
+    API->>+Git Controller: Send GRPC request
+    Git Controller->>+File system: Create project
+    Git Controller->>+API: OK
     API->>+Client: OK
+    end
+    note over Client: Add SSH key
+    rect rgb(200, 150, 255)
     Client->>+API: Create SSH key
     API->>+Database: Create new SSH key
     Database->>+API: OK
     API->>+Client: OK
-    Client->>+Git Repository Manager: Push project
-    Git Repository Manager->>+Git Server: Store project
-    Git Repository Manager->>+Docker registry: Build & save image
-    Git Repository Manager->>+ Client: OK
+    end
+    note over Client: Push project to remote
+    rect rgb(230, 160, 200)
+    Client->>+SSH Server: Push project
+    SSH Server->>+File system: Store project
+    SSH Server->>+Docker: Build & save image
+    SSH Server->>+ Client: OK
+    end
+    note over Client: Deploy a project
+    rect rgb(120, 180, 160)
     Client->>+API: Deploy project
     API->>+Pomegranate: Deploy project
-    Pomegranate->>+Docker registry: get image
+    Pomegranate->>+Docker: Deploy with built image
     Pomegranate->>+API: OK
     API->>+Client: OK
+    end
 ```
 
 As described previously, the API manages most of the user interactions and redirects them to the right service. The only time the Client interacts directly with other applications, is to push their project to the server.
