@@ -24,7 +24,6 @@ A list of TPMs (Third-Party Modules) might be written to give more insight about
 
 #### Client API
 
-
 The Client API is one of the fundamental parts of our project. It not only handles all Client interactions, but is also the only application that can write any data in the shared database. It notifies [Pomegranate](#client-applications-deployment), the deployment manager, each time a project needs to be deployed and lets a user add their SSH keys to be able to connect to the local Git server. Every user request is sent and verified by the API before being carried out.
 
 With this API being such an important part of the project for the Client, the choice of language and frameworks was very important to allow for maximal performance. It is made using [NestJS](https://nestjs.com/) with [TypeScript](https://www.typescriptlang.org/).
@@ -51,7 +50,6 @@ Moreover, all of the support that NestJS provides doesn't make it slower. Benchm
 
 The API is currently running on NestJS-express v10.0.3, which has just been released. Two years have passed since the last benchmarks, and we can expect NestJS to be even faster as of now.
 
-
 ##### Authentication strategies
 
 Regarding the authentication strategy, our team decided to create a `GET /auth/login` endpoint which returns both a JWT HttpOnly cookie and a Bearer token.
@@ -69,7 +67,11 @@ To communicate with other services, especially Pomegranate and the git-repo-mana
 
 ##### SSH key
 
-To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account. Using the command line, they will then be able to push their repositories' code to the server.
+To be able to push their projects to the Git server, each user needs to associate at least one SSH key to their account.
+Using the command line, they will then be able to push their repositories' code to the server.
+
+The API is responsible for the handling, storage and processing of the SSH keys. It acts as a "serving hatch" to store the keys in the database.
+The git ssh server will then query the database directly to use compare the SSH keys sent by the Client to the ones in the database.
 
 ##### Administrators
 
@@ -377,9 +379,11 @@ In this case, our DNS registrar is Porkbun, and our certificate authority is Let
 ### API
 
 This project introduced most members of the team to NestJS. Due to its well written documentation it was easily picked up and with the various modules it allows for good performance and automized a lot during development.
+The team could then apply best practices, like guards and interceptors, in order to develop more efficiently and with an overall better code quality.
 
-However, we had some problems concerning the API as a whole. In the beginning, the API was meant to only manage the users. A centralized controller should have managed the communication between the API, Pomegranate and the git server. However, as more and more time passed, the controller was completely erased and the API dealt with most of its responsibilities. This led to an important increase of the workload, especially since it already had some delay in the early stages of the development due to miscommunication.
-
+However, we had some problems concerning the API as a whole. In the beginning, the API was meant to only manage the users.
+A centralized controller should have managed the communication between the API, Pomegranate and the git server.
+However, as more and more time passed, the controller was completely erased and the API dealt with most of its responsibilities. This led to an important increase of the workload, especially since it already had some delay in the early stages of the development due to miscommunication.
 
 ### Infrastructure
 
