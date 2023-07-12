@@ -120,7 +120,7 @@ In this schema, we can see the different components interacting with each other.
 
 For this first iteration, we decided to split services to allow for a modular architecture. Doing so allows us to easily replace a component if needed, and to scale each component independently.
 
-- The client API is the main component that will be used by the clients to interact with the service. This API will then interact with the Git controller to create repositories and with Pomegranate to create Docker deployments, and with the database to store the data.
+- The client API is the main component that is used by the clients to interact with the service. This API communicates with the Git controller for repositories management, with Pomegranate to create Docker deployments and with the database to store the data.
 - The Git controller will interact with the host file system to create repositories, and with the local container registry to push images.
 - Pomegranate, our deployment manager, will interact with the local container registry to pull images and with the host file system to create deployments.
 
