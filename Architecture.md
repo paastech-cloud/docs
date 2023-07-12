@@ -120,10 +120,10 @@ sequenceDiagram
     end
     note over Client: Push project to remote
     rect rgb(230, 160, 200)
-    Client->>+SSH Server: Push project
-    SSH Server->>+File system: Store project
-    SSH Server->>+Docker: Build & save image
-    SSH Server->>+ Client: OK
+    Client->>+GitServer: Push project
+    GitServer->>+File system: Store project
+    GitServer->>+Docker: Build & save image
+    GitServer->>+ Client: OK
     end
     note over Client: Deploy a project
     rect rgb(120, 180, 160)
