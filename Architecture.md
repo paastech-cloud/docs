@@ -29,15 +29,15 @@ The web application offers to users several public and protected routes, which g
 An anonymous user can view:
 
 - The home page
-- The login/sign up pages
-- The email verification and password reset page
+- The login and sign-up pages
+- The email verification and password reset pages
 
 On top of that, an authenticated user has access to their personal dashboard, which includes:
 
 - their profile
 - their projects
-- project info
-- actions and logs
+- their projects' information
+- actions and logs for a given project
 - environment variables
 - project settings (which just allow to delete a project for now)
 
@@ -48,10 +48,10 @@ flowchart LR
     A{App} --> B[Public]
     A --> C[Protected]
     B -->|'root' /| D(HomePage)
-    C -->|/dashboard| E(DashboardHomePage)
+    C -->|/dashboard/| E(DashboardHomePage)
     D -->|login| F(LoginPage)
     D -->|register| G(RegisterPage)
-    D -->|email-verificatio/:token| H(EmailVerificationPage)
+    D -->|email-verification/:token| H(EmailVerificationPage)
     D -->|password-recovery| I(PasswordRecoveryPage)
     D -->|password-reset/:token| J(PasswordResetPage)
     E -->|profile| K(ProfilePage)
