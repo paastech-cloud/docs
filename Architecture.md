@@ -60,7 +60,9 @@ flowchart LR
     L -->|env| N(EnvironmentTab)
     L -->|settings| O(SettingsTab)
 ```
-As was said earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The routes which allow users to access their profile and projects are obviously not available for anonymous visitors.
+As mentioned earlier, the website is divided into two parts: publicly-accessible and protected. Public endpoints are those related to user authentication, including password recovery and account activation via email validation. The `:token` parameter used both for email verification and password reset is a UUID value which a user receives by email. This URL parameter is mandatory as it is used by the API to find a corresponding user in the database and either validate their account or authorize a password reset (cf. [Database Architecture](#database-architecture)).
+
+The routes which allow users to access their profile and projects are not available for anonymous visitors. When accessing the `/dashboard` route, a user can view a list of all their existing projects. Clicking on one of the list items will open a page with more details about a particular project. The `:projectId` parameter in the page URL is thus the UUID of a project in the database, it is sent to the API to fetch additional data about the project.
 
 #### CLI (Command-Line Interface)
 
