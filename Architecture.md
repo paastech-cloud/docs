@@ -108,7 +108,7 @@ This file also ensure that:
 
 ### Organisational overview
 
-In the beginning, we held a few meetings including everyone to specify all of the necessary functionalities. Due to high number of people we weren't really able to be as productive as we wanted but managed to create an overall specifications chart.
+In the beginning, we held a few meetings inviting everyone to specify all of the necessary functionalities. As a result of the large number of participants, we weren't really able to be as productive as we wanted but managed to create a first baseline of a specifications chart.
 
 Afterwards, the work was split up into 3 teams of roughly equal size:
  
