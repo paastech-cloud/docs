@@ -28,7 +28,7 @@ The web application offers to users several public and protected routes, which g
 An anonymous user can view:
 
 - The home page
-- The login / sign up pages
+- The login/sign up pages
 - The email verification and password reset page
 
 On top of that, an authenticated user has access to their personal dashboard, which includes:
@@ -39,6 +39,26 @@ On top of that, an authenticated user has access to their personal dashboard, wh
 - actions and logs
 - environment variables
 - project settings (which just allow to delete a project for now)
+
+See the schema of the app routes below to better understand how the web interface is structured:
+
+```mermaid
+flowchart LR
+    A{App} --> B[Public]
+    A --> C[Protected]
+    B -->|'root' /| D(HomePage)
+    C -->|/dashboard| E(DashboardHomePage)
+    D -->|login| F(LoginPage)
+    D -->|register| G(RegisterPage)
+    D -->|email-verificatio/:token| H(EmailVerificationPage)
+    D -->|password-recovery| I(PasswordRecoveryPage)
+    D -->|password-reset/:token| J(PasswordResetPage)
+    E -->|profile| K(ProfilePage)
+    E -->|:projectId| L(DashboardDetails)
+    L -->|logs| M(LogsTab)
+    L -->|env| N(EnvironmentTab)
+    L -->|settings| O(SettingsTab)
+```
 
 #### CLI (Command-Line Interface)
 
